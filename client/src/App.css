@@ -1,38 +1,214 @@
-.App {
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;1,600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Rubik", sans-serif;
+}
+
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.wrapper {
+  width: 85%;
+  margin: auto;
+  padding: 30px;
+  background-color: transparent;
+}
+
+.header-main {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  font-style: italic;
+  margin-left: 20px;
+}
+
+.op-logo {
+  width: 60px;
+  height: 60px;
+}
+
+.header-nav {
+  display: flex;
+  gap: 25px;
+}
+
+.h-link {
+  color: #68778d;
+  font-size: 1.1rem;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.h-link:hover {
+  color: #ff1420;
+  font-size: 1.1rem;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.footer {
+  position: relative;
+  margin-top: 5vh;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.footer h3 {
+  font-weight: lighter;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.logo-footer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.flipside-logo {
+  width: 250px;
+  height: 60px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.footer-links {
+  text-decoration: none;
+  color: #000000;
 }
+
+.footer-links:visited {
+  text-decoration: none;
+  color: #000000;
+}
+
+.triple {
+  margin: auto;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.big-numbers {
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.big-numbers h1 {
+  color: #ff1420;
+  margin-bottom: 10px;
+  font-size: xxx-large;
+}
+
+.big-numbers h2 {
+  color: #68778d;
+  font-size: medium;
+}
+
+.single-main {
+  margin: auto;
+  padding: 20px;
+  background-color: transparent;
+  margin-bottom: 20px;
+}
+
+.title-date {
+  width: 90%;
+  margin: auto;
+}
+
+.table-title {
+  margin-bottom: 10px;
+}
+
+.table-wrapper {
+  position: relative;
+}
+
+.table-scroll {
+  max-height: 700px;
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
+.table-main {
+  border-collapse: collapse;
+  width: 90%;
+  margin: auto;
+  box-shadow: 0 0 20px #00000026;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.table-main thead tr {
+  background-color: #3d4147;
+  color: #ffffff;
+  border-left: 2px solid #3d4147;
+  border-right: 2px solid #3d4147;
+}
+
+.table-main th,
+td {
+  padding: 12px 15px;
+}
+
+.table-main tbody tr {
+  border-bottom: 1px solid #00000026;
+  border-left: 2px solid #3d4147;
+  border-right: 2px solid #3d4147;
+}
+
+.table-main tbody tr:hover {
+  background-color: #fae4e6;
+}
+
+.table-main tbody tr:last-of-type {
+  border-bottom: 2px solid #3d4147;
+}
+
+.table-main a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.table-main a:visited {
+  text-decoration: none;
+  color: #000000;
+}
+
+.validator-voters {
+  text-align: center;
+}
+
+.validator-shares {
+  text-align: center;
+}
+
+th.first-column {
+  text-align: start;
+}
+
+.sorter {
+  cursor: pointer;
+}
+
+
+
