@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Flipside } from "@flipsidecrypto/sdk";
+import Pagination from "./Pagination";
 
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
@@ -12,6 +13,37 @@ const Leaderboard = () => {
   const [propsSort, setPropsSort] = useState(false);
   const [delSort, setDelSort] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [slice, setSlice] = useState([]);
+  const rowsPerPage = 10;
+
+  const sliceOPData = (OPData, currentPage, rowsPerPage) => {
+    return OPData.slice(
+      (currentPage - 1) * rowsPerPage,
+      currentPage * rowsPerPage
+    );
+  };
+
+  const sliceOP = OPData.slice((currentPage - 1) * 10, currentPage * 10);
+
+  const sliceDel = delData.slice((currentPage - 1) * 10, currentPage * 10);
+
+  const sliceProps = propsData.slice((currentPage - 1) * 10, currentPage * 10);
+
+  const sliceDelData = (delData, currentPage, rowsPerPage) => {
+    return delData.slice(
+      (currentPage - 1) * rowsPerPage,
+      currentPage * rowsPerPage
+    );
+  };
+
+  const slicePropsData = (propsData, currentPage, rowsPerPage) => {
+    return propsData.slice(
+      (currentPage - 1) * rowsPerPage,
+      currentPage * rowsPerPage
+    );
+  };
 
   const propsSortHandler = () => {
     setOPSort(false);
@@ -84,8 +116,6 @@ const Leaderboard = () => {
     });
   }, []);
 
-  console.log(OPData);
-
   return (
     <div className="single-main">
       {loading ? (
@@ -124,7 +154,7 @@ const Leaderboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {propsData.map((delegate, index) => (
+                    {sliceProps.map((delegate, index) => (
                       <tr>
                         <td>
                           <a
@@ -146,6 +176,7 @@ const Leaderboard = () => {
                         <td className="validator-shares">
                           {delegate[3].toLocaleString(undefined, {
                             maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
                           })}
                         </td>
                         <td className="validator-shares">
@@ -157,6 +188,7 @@ const Leaderboard = () => {
                         <td className="validator-shares">
                           {delegate[5].toLocaleString(undefined, {
                             maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
                           })}
                         </td>
                         <td className="validator-shares">
@@ -169,6 +201,12 @@ const Leaderboard = () => {
                     ))}
                   </tbody>
                 </table>
+                <Pagination
+                  currentPage={currentPage}
+                  total={180}
+                  limit={20}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
               </div>
             </div>
           ) : delSort ? (
@@ -198,7 +236,7 @@ const Leaderboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {delData.map((delegate, index) => (
+                    {sliceDel.map((delegate, index) => (
                       <tr>
                         <td>
                           <a
@@ -220,6 +258,7 @@ const Leaderboard = () => {
                         <td className="validator-shares">
                           {delegate[3].toLocaleString(undefined, {
                             maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
                           })}
                         </td>
                         <td className="validator-shares">
@@ -231,6 +270,7 @@ const Leaderboard = () => {
                         <td className="validator-shares">
                           {delegate[5].toLocaleString(undefined, {
                             maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
                           })}
                         </td>
                         <td className="validator-shares">
@@ -243,6 +283,12 @@ const Leaderboard = () => {
                     ))}
                   </tbody>
                 </table>
+                <Pagination
+                  currentPage={currentPage}
+                  total={180}
+                  limit={20}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
               </div>
             </div>
           ) : (
@@ -272,7 +318,7 @@ const Leaderboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {OPData.map((delegate, index) => (
+                    {sliceOP.map((delegate, index) => (
                       <tr>
                         <td>
                           <a
@@ -294,6 +340,7 @@ const Leaderboard = () => {
                         <td className="validator-shares">
                           {delegate[3].toLocaleString(undefined, {
                             maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
                           })}
                         </td>
                         <td className="validator-shares">
@@ -305,6 +352,7 @@ const Leaderboard = () => {
                         <td className="validator-shares">
                           {delegate[5].toLocaleString(undefined, {
                             maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
                           })}
                         </td>
                         <td className="validator-shares">
@@ -317,6 +365,12 @@ const Leaderboard = () => {
                     ))}
                   </tbody>
                 </table>
+                <Pagination
+                  currentPage={currentPage}
+                  total={180}
+                  limit={20}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
               </div>
             </div>
           )}

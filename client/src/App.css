@@ -37,7 +37,7 @@ body {
   font-size: 3rem;
   font-weight: 700;
   font-style: italic;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 .op-logo {
@@ -52,7 +52,7 @@ body {
 
 .h-link {
   color: #68778d;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-decoration: none;
   font-weight: bold;
   cursor: pointer;
@@ -60,7 +60,7 @@ body {
 
 .h-link:hover {
   color: #ff1420;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-decoration: none;
   font-weight: bold;
   cursor: pointer;
@@ -112,13 +112,13 @@ body {
 }
 
 .big-numbers h1 {
-  color: #ff1420;
+  color: #3d4147;
   margin-bottom: 10px;
   font-size: xxx-large;
 }
 
 .big-numbers h2 {
-  color: #68778d;
+  color: #ff1420;
   font-size: medium;
 }
 
@@ -151,11 +151,14 @@ body {
 .table-main {
   border-collapse: collapse;
   width: 90%;
+  min-height: 500px;
+  max-height: 500px;
   margin: auto;
   box-shadow: 0 0 20px #00000026;
   border-radius: 5px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: smaller;
 }
 
 .table-main thead tr {
@@ -177,7 +180,8 @@ td {
 }
 
 .table-main tbody tr:hover {
-  background-color: #fae4e6;
+  background-color: #eceeef;
+  color: #ff1420;
 }
 
 .table-main tbody tr:last-of-type {
@@ -186,12 +190,12 @@ td {
 
 .table-main a {
   text-decoration: none;
-  color: #000000;
+  color: inherit;
 }
 
 .table-main a:visited {
   text-decoration: none;
-  color: #000000;
+  color: inherit;
 }
 
 .validator-voters {
@@ -210,5 +214,109 @@ th.first-column {
   cursor: pointer;
 }
 
+.pagjawn {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  font-size: small;
+}
 
+.pagination {
+  border-radius: 0.25rem;
+}
+.page-item {
+  display: inline;
+}
+.page-item:first-child .page-link {
+  margin-left: 0;
+  border-bottom-left-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
+}
+.page-item:last-child .page-link {
+  border-bottom-right-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+.page-item.active .page-link,
+.page-item.active .page-link:focus,
+.page-item.active .page-link:hover {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #ff1420;
+  border-color: #ff1420;
+}
+.page-item.disabled .page-link,
+.page-item.disabled .page-link:focus,
+.page-item.disabled .page-link:hover {
+  color: #818a91;
+  pointer-events: none;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ddd;
+}
+.page-link {
+  position: relative;
+  float: left;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  color: #3d4147;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+.page-link:focus,
+.page-link:hover {
+  color: #3d4147;
+  background-color: #eceeef;
+  border-color: #ddd;
+}
+
+.title-date {
+  width: 90%;
+  margin: auto;
+}
+
+.title-date div {
+  flex: auto;
+}
+
+.date-toggle {
+  text-align: right;
+  font-weight: bold;
+}
+
+.date-toggle button {
+  color: #68778d;
+  cursor: pointer;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  margin-left: 15px;
+}
+
+.chart-area {
+  width: 90%;
+  margin: auto;
+}
+
+.double {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  background-color: transparent;
+  margin-bottom: 20px;
+  margin-top: 40px;
+}
+
+.small-chart-area {
+  min-height: 150px;
+  width: 42%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #000000;
+}
 

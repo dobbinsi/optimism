@@ -4,16 +4,22 @@ import { motion } from "framer-motion";
 import BigNumbers from "./components/BigNumbers";
 import Footer from "./components/Footer";
 import Leaderboard from "./components/Leaderboard";
+import Redelegations from "./components/Redelegations";
+import Double from "./components/Double";
 
 function App() {
   return (
     <div className="wrapper">
       <div className="header-main">
         <div className="logo">
-          <a href="https://www.optimism.io/">
+          <a
+            href="https://www.optimism.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {" "}
             <motion.img
-              whileHover={{ scale: 1.2 }}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               src={opjawn}
               className="op-logo"
@@ -40,7 +46,7 @@ function App() {
             Forum
           </a>
           <a
-            href="https://app.optimism.io/delegates"
+            href="https://app.optimism.io/delegates?search=flipside"
             target="_blank"
             rel="noopener noreferrer"
             className="h-link"
@@ -51,6 +57,8 @@ function App() {
       </div>
       <BigNumbers />
       <Leaderboard />
+      <Redelegations />
+      <Double />
       <Footer />
     </div>
   );
