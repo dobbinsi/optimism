@@ -87,7 +87,7 @@ function App() {
       <div className="single-main">
         {loading ? (
           <div className="loader-blank" style={style}>
-            <BounceLoader color="#ff1420" size={250} />
+            <BounceLoader color="#ff1420" size={150} />
             <h4>Fetching Data...</h4>
           </div>
         ) : (
