@@ -22,13 +22,13 @@ const Redelegations = () => {
   const [oneReData, setOneReData] = useState([]);
   const [thirtyReData, setThirtyReData] = useState([]);
 
-  const [thirtyState, setThirtyState] = useState(false);
-  const [ninetyState, setNinetyState] = useState(true);
-  const [oneState, setOneState] = useState(true);
+  const [thirtyState, setThirtyState] = useState(true);
+  const [ninetyState, setNinetyState] = useState(false);
+  const [oneState, setOneState] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [active1, setActive1] = useState(false);
+  const [active1, setActive1] = useState(true);
   const [active2, setActive2] = useState(false);
-  const [active3, setActive3] = useState(true);
+  const [active3, setActive3] = useState(false);
 
   const chartDates30 = thirtyTotData.map((item) => {
     return item[0];
@@ -127,14 +127,13 @@ const Redelegations = () => {
         position: "",
       },
       title: {
-        display: false,
-        text: "Unique Proposals",
+        display: true,
+        text: "Total OP Tokens Delegated",
         font: {
           size: 18,
           family: "'Rubik', sans-serif",
-          weight: "bold",
+          weight: "lighter",
         },
-        color: "#ffffff",
       },
     },
   };
@@ -152,7 +151,7 @@ const Redelegations = () => {
       {
         label: "Re-Delegations (OP)",
         data: chartAmounts30Re,
-        backgroundColor: "#535962",
+        backgroundColor: "#99a7bc",
         borderColor: ["#3d4147"],
         borderWidth: 1.5,
       },
@@ -172,7 +171,7 @@ const Redelegations = () => {
       {
         label: "Re-Delegations (OP)",
         data: chartAmounts90Re,
-        backgroundColor: "#535962",
+        backgroundColor: "#99a7bc",
         borderColor: ["#3d4147"],
         borderWidth: 0.75,
       },
@@ -192,7 +191,7 @@ const Redelegations = () => {
       {
         label: "Re-Delegations (OP)",
         data: chartAmounts180Re,
-        backgroundColor: "#535962",
+        backgroundColor: "#99a7bc",
         borderColor: ["#3d4147"],
         borderWidth: 0.75,
       },
@@ -300,7 +299,6 @@ const Redelegations = () => {
     };
 
     const resultOneRe = flipside.query.run(queryOneRe).then((records) => {
-      console.log(records.rows);
       setOneReData(records.rows);
       setLoading(false);
     });
@@ -314,10 +312,10 @@ const Redelegations = () => {
         <>
           <div className="title-date">
             <div className="table-title">
-              <h1>Trends: Delegation Activity (OP Tokens)</h1>
+              <h1>Trends: Delegation Activity</h1>
             </div>
             <div className="date-toggle">
-            <p>Select Date Range</p>
+              <p>Select Date Range</p>
               <button
                 style={{ color: active1 ? "#ff1420" : "#68778d" }}
                 onClick={thirtyHandler}

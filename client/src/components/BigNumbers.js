@@ -42,16 +42,49 @@ const BigNumbers = () => {
       ttlMinutes: 10,
     };
 
-    try {
-      const resultBigNumbers2 = flipside.query
-        .run(queryBigNumbers2)
-        .then((records) => {
-          setTokensDelegated(records.rows[0][0]);
-        });
-    } catch (error) {
-      console.log("error in BigNumbers2");
-      console.log(error);
-    }
+    const resultBigNumbers2 = flipside.query
+      .run(queryBigNumbers2)
+      .then((records) => {
+        setTokensDelegated(records.rows[0][0]);
+      });
+  }, []);
+
+  useEffect(() => {
+    const flipside = new Flipside(
+      API_KEY,
+      "https://node-api.flipsidecrypto.com"
+    );
+
+    const queryBigNumbers222 = {
+      sql: `SELECT proposal_title, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot WHERE voter = '0x62a43123FE71f9764f26554b3F5017627996816a' AND space_id = 'opcollective.eth'`,
+      ttlMinutes: 10,
+    };
+
+    const resultBigNumbers222 = flipside.query
+      .run(queryBigNumbers222)
+      .then((records) => {
+        console.log(records);
+        // setTokensDelegated(records.rows[0][0]);
+      });
+  }, []);
+
+  useEffect(() => {
+    const flipside = new Flipside(
+      API_KEY,
+      "https://node-api.flipsidecrypto.com"
+    );
+
+    const queryBigNumbers224 = {
+      sql: `WITH votes AS (SELECT voter AS delegate, proposal_title, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote_option, tag_name AS value FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags ON LOWER(voter) = LOWER(address) WHERE space_id = 'opcollective.eth' AND creator = 'jkhuhnke11' AND tag_type = 'delegate_value' AND blockchain = 'optimism' AND tag_name = 'defi' ), forr AS ( SELECT delegate, count(vote_option) as fors FROM votes WHERE vote_option = 'For' group by delegate ), against AS (SELECT delegate, count(vote_option) as againsts FROM votes WHERE vote_option = 'Against' group by delegate ), abstain AS ( SELECT delegate, count(vote_option) as abstains FROM votes WHERE vote_option = 'Abstain' group by delegate ) SELECT DISTINCT d.delegate, tag_name as delegate_name, value, fors, againsts, abstains FROM votes d INNER JOIN abstain a ON d.delegate = a.delegate INNER JOIN against ag ON d.delegate = ag.delegate INNER JOIN forr f ON d.delegate = f.delegate LEFT OUTER JOIN crosschain.core.address_tags ON LOWER(d.delegate) = LOWER(address) WHERE creator = 'jkhuhnke11' AND tag_type = 'delegate_name' AND blockchain = 'optimism' AND value = 'defi'`,
+      ttlMinutes: 10,
+    };
+
+    const resultBigNumbers224 = flipside.query
+      .run(queryBigNumbers224)
+      .then((records) => {
+        console.log(records.rows);
+        // setTokensDelegated(records.rows[0][0]);
+      });
   }, []);
 
   useEffect(() => {

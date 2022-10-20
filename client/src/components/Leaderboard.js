@@ -124,7 +124,7 @@ const Leaderboard = () => {
         <>
           <div className="title-date">
             <div className="table-title">
-              <h1>Leaderboard: Optimism Delegates</h1>
+              <h1 className="leader-title">Leaderboard: Optimism Delegates</h1>
             </div>
           </div>
           {propsSort ? (

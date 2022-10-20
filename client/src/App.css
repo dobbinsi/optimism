@@ -134,8 +134,8 @@ body {
   margin: auto;
 }
 
-.table-title {
-  margin-bottom: 10px;
+.leader-title {
+  margin-bottom: 20px;
 }
 
 .table-wrapper {
@@ -273,7 +273,6 @@ th.first-column {
 }
 
 .title-date {
-  width: 90%;
   margin: auto;
 }
 
@@ -283,11 +282,17 @@ th.first-column {
 
 .date-toggle {
   text-align: right;
-  font-weight: bold;
+}
+
+.date-toggle-values {
+  margin: auto;
+  width: 90%;
+  text-align: right;
 }
 
 .date-toggle button {
   color: #68778d;
+  color: #99a7bc;
   cursor: pointer;
   font-size: 1rem;
   border: none;
@@ -307,7 +312,7 @@ th.first-column {
   justify-content: space-between;
   background-color: transparent;
   margin-bottom: 20px;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .small-chart-area {
@@ -317,6 +322,41 @@ th.first-column {
   background-color: #ffffff;
   border-radius: 5px;
   border-style: solid;
-  border-color: #000000;
+  border-width: 2px;
+  border-color: #3d4147;
 }
+
+.small-chart-area h3 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #3d4147
+}
+
+.sum-flows-text {
+  text-align: center;
+  margin-top: 20px;
+  color: #3d4147;
+}
+
+.sum-flows {
+  text-align: center;
+  color: 1;
+}
+
+.sum-flows-neg {
+  text-align: center;
+  color: #ff1420;
+}
+
+#input-label {
+  margin-right: 0px;
+  color: #000000;
+  font-size: medium;
+}
+
+#values {
+  color: #ff1420;
+}
+
+
 

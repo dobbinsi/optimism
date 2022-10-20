@@ -6,6 +6,8 @@ import Footer from "./components/Footer";
 import Leaderboard from "./components/Leaderboard";
 import Redelegations from "./components/Redelegations";
 import Double from "./components/Double";
+import LineVotes from "./components/LineVotes";
+import Values from "./components/Values";
 
 function App() {
   return (
@@ -59,6 +61,8 @@ function App() {
       <Leaderboard />
       <Redelegations />
       <Double />
+      <LineVotes />
+      <Values />
       <Footer />
     </div>
   );
