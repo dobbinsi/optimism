@@ -126,7 +126,7 @@ body {
   margin: auto;
   padding: 20px;
   background-color: transparent;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .title-date {
@@ -351,12 +351,16 @@ th.first-column {
 #input-label {
   margin-right: 0px;
   color: #000000;
-  font-size: medium;
+  font-size: 1rem;
 }
 
 #values {
   color: #ff1420;
 }
 
+.loader-blank h4 {
+  text-align: center;
+  margin-top: 20px;
+}
 
 
