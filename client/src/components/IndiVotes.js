@@ -6,6 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { InputLabel } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import Pagination from "./Pagination";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
@@ -63,13 +64,16 @@ const IndiVotes = () => {
     "Zeng Jiajun",
   ];
 
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   const [value, setValue] = useState("Flipside Crypto");
   const [oldSort, setOldSort] = useState(false);
 
-  const handleChange = (event) => setValue(event.target.value);
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    setLoading(true);
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const sliceData = data.slice((currentPage - 1) * 10, currentPage * 10);
@@ -114,103 +118,105 @@ const IndiVotes = () => {
 
   return (
     <div className="single-main">
-      {loading ? (
-        <div className="loader-blank"></div>
-      ) : (
-        <>
-          <div className="single-main">
-            <div className="title-date">
-              <div className="table-title">
-                <h1>Voting Activity: Individual Delegates</h1>
-              </div>
-            </div>
-            <div className="date-toggle-values">
-              <FormControl sx={{ m: 1, minWidth: 100 }}>
-                <InputLabel id="input-label">Select Value</InputLabel>
-                <Select
-                  id="values"
-                  value={value}
-                  label="value"
-                  disableUnderline
-                  MenuProps={{
-                    style: {
-                      maxHeight: 400,
-                    },
-                  }}
-                  onChange={handleChange}
-                >
-                  {delegates.map((delegate, index) => {
-                    return <MenuItem value={delegate}>{delegate}</MenuItem>;
-                  })}
-                </Select>
-              </FormControl>
-            </div>
-            {oldSort ? (
-              <div className="table-wrapper">
-                <div className="table-scroll">
-                  <table className="table-main">
-                    <thead>
-                      <tr>
-                        <th className="first-column">Proposal Title</th>
-                        <th className="sorter" onClick={oldSortHandler}>
-                          Date
-                        </th>
-                        <th className="sorter">Vote</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sliceData2.map((vote, index) => (
-                        <tr>
-                          <td>{vote[2]}</td>
-                          <td className="validator-voters">{vote[3]}</td>
-                          <td className="validator-voters">{vote[5]}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <Pagination
-                    currentPage={currentPage}
-                    total={180}
-                    limit={20}
-                    onPageChange={(page) => setCurrentPage(page)}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="table-wrapper">
-                <div className="table-scroll">
-                  <table className="table-main">
-                    <thead>
-                      <tr>
-                        <th className="first-column">Proposal Title</th>
-                        <th className="sorter" onClick={oldSortHandler}>
-                          Date
-                        </th>
-                        <th className="sorter">Vote</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sliceData.map((vote, index) => (
-                        <tr>
-                          <td>{vote[2]}</td>
-                          <td className="validator-voters">{vote[3]}</td>
-                          <td className="validator-voters">{vote[5]}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <Pagination
-                    currentPage={currentPage}
-                    total={180}
-                    limit={20}
-                    onPageChange={(page) => setCurrentPage(page)}
-                  />
-                </div>
-              </div>
-            )}
+      <div className="single-main">
+        <div className="title-date">
+          <div className="table-title">
+            <h1>Voting Activity: Individual Delegates</h1>
           </div>
-        </>
-      )}
+        </div>
+        <div className="date-toggle-values">
+          <FormControl sx={{ m: 1, minWidth: 100 }}>
+            <InputLabel id="input-label">Select Delegate</InputLabel>
+            <Select
+              id="values"
+              value={value}
+              label="value"
+              disableUnderline
+              MenuProps={{
+                style: {
+                  maxHeight: 400,
+                },
+              }}
+              onChange={handleChange}
+            >
+              {delegates.map((delegate, index) => {
+                return <MenuItem value={delegate}>{delegate}</MenuItem>;
+              })}
+            </Select>
+          </FormControl>
+        </div>
+        {oldSort ? (
+          <div className="table-wrapper">
+            <div className="table-scroll">
+              <table className="table-main">
+                <thead>
+                  <tr>
+                    <th className="first-column">Proposal Title</th>
+                    <th className="sorter" onClick={oldSortHandler}>
+                      Date
+                    </th>
+                    <th className="sorter">Vote</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sliceData2.map((vote, index) => (
+                    <tr>
+                      <td>{vote[2]}</td>
+                      <td className="validator-voters">{vote[3]}</td>
+                      <td className="validator-voters">{vote[5]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Pagination
+                currentPage={currentPage}
+                total={180}
+                limit={20}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="table-wrapper">
+            <div className="table-scroll">
+              <table className="table-main">
+                <thead>
+                  <tr>
+                    <th className="first-column">Proposal Title</th>
+                    <th className="sorter" onClick={oldSortHandler}>
+                      Date
+                    </th>
+                    <th className="sorter">Vote</th>
+                  </tr>
+                </thead>
+                {loading ? (
+                  <ClipLoader
+                    className="spinner"
+                    size={50}
+                    speedMultiplier={0.75}
+                  />
+                ) : (
+                  <tbody>
+                    {sliceData.map((vote, index) => (
+                      <tr>
+                        <td>{vote[2]}</td>
+                        <td className="validator-voters">{vote[3]}</td>
+                        <td className="validator-voters">{vote[5]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                )}
+              </table>
+              <Pagination
+                currentPage={currentPage}
+                total={180}
+                limit={20}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

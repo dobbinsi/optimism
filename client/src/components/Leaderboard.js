@@ -18,7 +18,7 @@ const Leaderboard = () => {
   const [OPSort, setOPSort] = useState(true);
   const [propsSort, setPropsSort] = useState(false);
   const [delSort, setDelSort] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [delegatorMode, setDelegatorMode] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);

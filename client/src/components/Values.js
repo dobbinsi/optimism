@@ -16,14 +16,19 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { InputLabel } from "@material-ui/core";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
 const Values = () => {
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [value, setValue] = useState("data and analytics");
-  const handleChange = (event) => setValue(event.target.value);
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    setLoading(true);
+  };
 
   const chartLabels = data.map((item) => {
     return item[1];
@@ -141,69 +146,69 @@ const Values = () => {
 
   return (
     <div className="single-main-leader">
-      {loading ? (
-        <div className="loader-blank"></div>
-      ) : (
-        <>
-          <div className="single-main">
-            <div className="title-date">
-              <div className="table-title">
-                <h1>Trends: How Delegates Vote Based on Values</h1>
-              </div>
-            </div>
-            <div className="date-toggle-values">
-              <FormControl sx={{ m: 1, minWidth: 100 }}>
-                <InputLabel id="input-label">Select Value</InputLabel>
-                <Select
-                  id="values"
-                  value={value}
-                  label="value"
-                  disableUnderline
-                  MenuProps={{
-                    style: {
-                      maxHeight: 400,
-                    },
-                  }}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={"accessibility"}>Accessibility</MenuItem>
-                  <MenuItem value={"bridges"}>Bridges</MenuItem>
-                  <MenuItem value={"communication"}>Communication</MenuItem>
-                  <MenuItem value={"DAO"}>DAO</MenuItem>
-                  <MenuItem value={"data and analytics"}>
-                    Data and Analytics
-                  </MenuItem>
-                  <MenuItem value={"defi"}>DeFi</MenuItem>
-                  <MenuItem value={"developer tools"}>Developer Tools</MenuItem>
-                  <MenuItem value={"economics"}>Economics</MenuItem>
-                  <MenuItem value={"education"}>Education</MenuItem>
-                  <MenuItem value={"environment"}>Environment</MenuItem>
-                  <MenuItem value={"events"}>Events</MenuItem>
-                  <MenuItem value={"gaming"}>Gaming</MenuItem>
-                  <MenuItem value={"governance"}>Governance</MenuItem>
-                  <MenuItem value={"identity"}>Identity</MenuItem>
-                  <MenuItem value={"infrastructure"}>Infrastructure</MenuItem>
-                  <MenuItem value={"legal"}>Legal</MenuItem>
-                  <MenuItem value={"metaverse"}>Metaverse</MenuItem>
-                  <MenuItem value={"music"}>Music</MenuItem>
-                  <MenuItem value={"NFT"}>NFT</MenuItem>
-                  <MenuItem value={"oracles"}>Oracles</MenuItem>
-                  <MenuItem value={"partnership"}>Partnership</MenuItem>
-                  <MenuItem value={"privacy"}>Privacy</MenuItem>
-                  <MenuItem value={"research"}>Research</MenuItem>
-                  <MenuItem value={"security"}>Security</MenuItem>
-                  <MenuItem value={"social impact"}>Social Impact</MenuItem>
-                  <MenuItem value={"wallets"}>Wallets</MenuItem>
-                  <MenuItem value={"writing"}>Writing</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div className="chart-area">
-              <Bar options={chartOptions} data={chartData} />
-            </div>
+      <div className="single-main">
+        <div className="title-date">
+          <div className="table-title">
+            <h1>Trends: How Delegates Vote Based on Values</h1>
           </div>
-        </>
-      )}
+        </div>
+        <div className="date-toggle-values">
+          <FormControl sx={{ m: 1, minWidth: 100 }}>
+            <InputLabel id="input-label">Select Value</InputLabel>
+            <Select
+              id="values"
+              value={value}
+              label="value"
+              disableUnderline
+              MenuProps={{
+                style: {
+                  maxHeight: 400,
+                },
+              }}
+              onChange={handleChange}
+            >
+              <MenuItem value={"accessibility"}>Accessibility</MenuItem>
+              <MenuItem value={"bridges"}>Bridges</MenuItem>
+              <MenuItem value={"communication"}>Communication</MenuItem>
+              <MenuItem value={"DAO"}>DAO</MenuItem>
+              <MenuItem value={"data and analytics"}>
+                Data and Analytics
+              </MenuItem>
+              <MenuItem value={"defi"}>DeFi</MenuItem>
+              <MenuItem value={"developer tools"}>Developer Tools</MenuItem>
+              <MenuItem value={"economics"}>Economics</MenuItem>
+              <MenuItem value={"education"}>Education</MenuItem>
+              <MenuItem value={"environment"}>Environment</MenuItem>
+              <MenuItem value={"events"}>Events</MenuItem>
+              <MenuItem value={"gaming"}>Gaming</MenuItem>
+              <MenuItem value={"governance"}>Governance</MenuItem>
+              <MenuItem value={"identity"}>Identity</MenuItem>
+              <MenuItem value={"infrastructure"}>Infrastructure</MenuItem>
+              <MenuItem value={"legal"}>Legal</MenuItem>
+              <MenuItem value={"metaverse"}>Metaverse</MenuItem>
+              <MenuItem value={"music"}>Music</MenuItem>
+              <MenuItem value={"NFT"}>NFT</MenuItem>
+              <MenuItem value={"oracles"}>Oracles</MenuItem>
+              <MenuItem value={"partnership"}>Partnership</MenuItem>
+              <MenuItem value={"privacy"}>Privacy</MenuItem>
+              <MenuItem value={"research"}>Research</MenuItem>
+              <MenuItem value={"security"}>Security</MenuItem>
+              <MenuItem value={"social impact"}>Social Impact</MenuItem>
+              <MenuItem value={"wallets"}>Wallets</MenuItem>
+              <MenuItem value={"writing"}>Writing</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        {loading ? (
+          <div className="chart-area">
+            <ClipLoader className="spinner" size={50} speedMultiplier={0.75} />
+          </div>
+        ) : (
+          <div className="chart-area">
+            <Bar options={chartOptions} data={chartData} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
