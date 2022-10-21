@@ -305,7 +305,7 @@ const Redelegations = () => {
   }, []);
 
   return (
-    <div className="single-main">
+    <div className="single-main-leader">
       {loading ? (
         <div className="loader-blank"></div>
       ) : (

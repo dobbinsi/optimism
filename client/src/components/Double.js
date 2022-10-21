@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Flipside } from "@flipsidecrypto/sdk";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import Tooltip from "@mui/material/Tooltip";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
@@ -77,6 +80,8 @@ const Double = () => {
     return comparison;
   }
 
+  const ttText = "Includes delegations and re-delegations.";
+
   useEffect(() => {
     const flipside = new Flipside(
       API_KEY,
@@ -84,7 +89,7 @@ const Double = () => {
     );
 
     const queryThirty = {
-      sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 30 AND delegation_type = 'Re-Delegation'), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
+      sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 30 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
       ttlMinutes: 10,
     };
 
@@ -101,7 +106,7 @@ const Double = () => {
     );
 
     const querySixty = {
-      sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 60 AND delegation_type = 'Re-Delegation'), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
+      sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 60 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
       ttlMinutes: 10,
     };
 
@@ -117,7 +122,7 @@ const Double = () => {
     );
 
     const queryNinety = {
-      sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 90 AND delegation_type = 'Re-Delegation'), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
+      sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 90 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
       ttlMinutes: 10,
     };
 
@@ -127,7 +132,7 @@ const Double = () => {
   }, []);
 
   return (
-    <div className="single-main">
+    <div className="single-main-leader">
       <div className="title-date">
         <div className="table-title">
           <h1>Trends: OP Gainers & Losers</h1>
@@ -156,7 +161,12 @@ const Double = () => {
       </div>
       <div className="double">
         <div className="small-chart-area">
-          <h3>Delegates with Largest Inflows</h3>
+          <h3>
+            Delegates with Net Increase{" "}
+            <Tooltip title={ttText} placement="top" fontSize="small">
+              <InfoOutlinedIcon></InfoOutlinedIcon>
+            </Tooltip>
+          </h3>
           {thirtyState && (
             <div className="little-table">
               <table className="table-main">
@@ -168,31 +178,39 @@ const Double = () => {
                     <th>OP Tokens</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {reverse30In.map((delegate, index) => (
-                    <tr>
-                      <td>
-                        <a
-                          href={"https://etherscan.io/address/".concat(
-                            delegate[0]
-                          )}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="table-links"
-                        >
-                          {delegate[1]}
-                        </a>
-                      </td>
-                      <td className="validator-voters">
-                        {delegate[2].toLocaleString(undefined, {
-                          minimumIntegerDigits: 2,
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                {loading ? (
+                  <ClipLoader
+                    className="spinner"
+                    size={50}
+                    speedMultiplier={0.75}
+                  />
+                ) : (
+                  <tbody>
+                    {reverse30In.map((delegate, index) => (
+                      <tr>
+                        <td>
+                          <a
+                            href={"https://etherscan.io/address/".concat(
+                              delegate[0]
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="table-links"
+                          >
+                            {delegate[1]}
+                          </a>
+                        </td>
+                        <td className="validator-voters">
+                          {delegate[2].toLocaleString(undefined, {
+                            minimumIntegerDigits: 2,
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                )}
               </table>
               <h2 className="sum-flows-text">Total OP Tokens Gained:</h2>
               <h2 className="sum-flows">
@@ -300,7 +318,7 @@ const Double = () => {
           )}
         </div>
         <div className="small-chart-area">
-          <h3>Delegates with Largest Outflows</h3>
+          <h3>Delegates with Net Decrease</h3>
           {thirtyState && (
             <div className="little-table">
               <table className="table-main">
@@ -312,31 +330,39 @@ const Double = () => {
                     <th>OP Tokens</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {slice30Out.map((delegate, index) => (
-                    <tr>
-                      <td>
-                        <a
-                          href={"https://etherscan.io/address/".concat(
-                            delegate[0]
-                          )}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="table-links"
-                        >
-                          {delegate[1]}
-                        </a>
-                      </td>
-                      <td className="validator-voters">
-                        {delegate[2].toLocaleString(undefined, {
-                          minimumIntegerDigits: 2,
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                {loading ? (
+                  <ClipLoader
+                    className="spinner"
+                    size={50}
+                    speedMultiplier={0.75}
+                  />
+                ) : (
+                  <tbody>
+                    {slice30Out.map((delegate, index) => (
+                      <tr>
+                        <td>
+                          <a
+                            href={"https://etherscan.io/address/".concat(
+                              delegate[0]
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="table-links"
+                          >
+                            {delegate[1]}
+                          </a>
+                        </td>
+                        <td className="validator-voters">
+                          {delegate[2].toLocaleString(undefined, {
+                            minimumIntegerDigits: 2,
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                )}
               </table>
               <h2 className="sum-flows-text">Total OP Tokens Lost:</h2>
               <h2 className="sum-flows-neg">

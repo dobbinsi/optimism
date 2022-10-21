@@ -126,7 +126,13 @@ body {
   margin: auto;
   padding: 20px;
   background-color: transparent;
-  margin-bottom: 40px;
+}
+
+.single-main-leader {
+  margin: auto;
+  padding: 20px;
+  background-color: transparent;
+  margin-bottom: 80px;
 }
 
 .title-date {
@@ -329,7 +335,7 @@ th.first-column {
 .small-chart-area h3 {
   margin-bottom: 20px;
   text-align: center;
-  color: #3d4147
+  color: #3d4147;
 }
 
 .sum-flows-text {
@@ -358,9 +364,17 @@ th.first-column {
   color: #ff1420;
 }
 
-.loader-blank h4 {
+.loader-blank h3 {
   text-align: center;
   margin-top: 20px;
 }
 
+.delegator-mode {
+  cursor: pointer;
+}
 
+.spinner {
+  position: absolute;
+  top: 40%;
+  left: 47.5%;
+}

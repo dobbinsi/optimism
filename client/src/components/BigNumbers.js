@@ -26,7 +26,6 @@ const BigNumbers = () => {
       .run(queryBigNumbers1)
       .then((records) => {
         setDelegators(records.rows[0][0]);
-        setLoading(false);
       });
   }, []);
 
@@ -59,37 +58,31 @@ const BigNumbers = () => {
 
   return (
     <div className="triple">
-      {loading ? (
-        <div className="loader-main"></div>
-      ) : (
-        <>
-          <div className="big-numbers">
-            <h1>
-              {delegators.toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-              })}
-            </h1>
-            <h2>Unique Wallets that Delegate</h2>
-          </div>
-          <div className="big-numbers">
-            <h1>
-              {tokensDelegated.toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-              })}
-            </h1>
-            <h2>Total OP Tokens Delegated</h2>
-          </div>
-          <div className="big-numbers">
-            <h1>
-              {percentCirculating.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }) + "%"}
-            </h1>
-            <h2>Percent Circulating Supply</h2>
-          </div>
-        </>
-      )}
+      <div className="big-numbers">
+        <h1>
+          {delegators.toLocaleString(undefined, {
+            maximumFractionDigits: 0,
+          })}
+        </h1>
+        <h2>Unique Wallets that Delegate</h2>
+      </div>
+      <div className="big-numbers">
+        <h1>
+          {tokensDelegated.toLocaleString(undefined, {
+            maximumFractionDigits: 0,
+          })}
+        </h1>
+        <h2>Total OP Tokens Delegated</h2>
+      </div>
+      <div className="big-numbers">
+        <h1>
+          {percentCirculating.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }) + "%"}
+        </h1>
+        <h2>Percent Circulating Supply</h2>
+      </div>
     </div>
   );
 };

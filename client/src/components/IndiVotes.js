@@ -65,11 +65,19 @@ const IndiVotes = () => {
 
   const [loading, setLoading] = useState([]);
   const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
   const [value, setValue] = useState("Flipside Crypto");
+  const [oldSort, setOldSort] = useState(false);
+
   const handleChange = (event) => setValue(event.target.value);
 
   const [currentPage, setCurrentPage] = useState(1);
   const sliceData = data.slice((currentPage - 1) * 10, currentPage * 10);
+  const sliceData2 = data2.slice((currentPage - 1) * 10, currentPage * 10);
+
+  const oldSortHandler = () => {
+    setOldSort(!oldSort);
+  };
 
   useEffect(() => {
     const flipside = new Flipside(
@@ -78,13 +86,29 @@ const IndiVotes = () => {
     );
 
     const queryVotes = {
-      sql: `SELECT proposal_title, vote_timestamp :: date AS date, trim(vote_option :: STRING, '["""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '["""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '["""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot WHERE voter = '0x62a43123FE71f9764f26554b3F5017627996816a' AND space_id = 'opcollective.eth' ORDER BY date DESC`,
+      sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date DESC`,
       ttlMinutes: 10,
     };
 
     const resultVotes = flipside.query.run(queryVotes).then((records) => {
       setData(records.rows);
       setLoading(false);
+    });
+  }, [value]);
+
+  useEffect(() => {
+    const flipside = new Flipside(
+      API_KEY,
+      "https://node-api.flipsidecrypto.com"
+    );
+
+    const queryVotes2 = {
+      sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date ASC`,
+      ttlMinutes: 10,
+    };
+
+    const resultVotes2 = flipside.query.run(queryVotes2).then((records) => {
+      setData2(records.rows);
     });
   }, [value]);
 
@@ -121,34 +145,69 @@ const IndiVotes = () => {
                 </Select>
               </FormControl>
             </div>
-            <div className="table-wrapper">
-              <div className="table-scroll">
-                <table className="table-main">
-                  <thead>
-                    <tr>
-                      <th className="first-column">Proposal Title</th>
-                      <th className="sorter">Date</th>
-                      <th className="sorter">Vote</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sliceData.map((vote, index) => (
+            {oldSort ? (
+              <div className="table-wrapper">
+                <div className="table-scroll">
+                  <table className="table-main">
+                    <thead>
                       <tr>
-                        <td>{vote[0]}</td>
-                        <td className="validator-voters">{vote[1]}</td>
-                        <td className="validator-voters">{vote[3]}</td>
+                        <th className="first-column">Proposal Title</th>
+                        <th className="sorter" onClick={oldSortHandler}>
+                          Date
+                        </th>
+                        <th className="sorter">Vote</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <Pagination
-                  currentPage={currentPage}
-                  total={180}
-                  limit={20}
-                  onPageChange={(page) => setCurrentPage(page)}
-                />
+                    </thead>
+                    <tbody>
+                      {sliceData2.map((vote, index) => (
+                        <tr>
+                          <td>{vote[2]}</td>
+                          <td className="validator-voters">{vote[3]}</td>
+                          <td className="validator-voters">{vote[5]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <Pagination
+                    currentPage={currentPage}
+                    total={180}
+                    limit={20}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="table-wrapper">
+                <div className="table-scroll">
+                  <table className="table-main">
+                    <thead>
+                      <tr>
+                        <th className="first-column">Proposal Title</th>
+                        <th className="sorter" onClick={oldSortHandler}>
+                          Date
+                        </th>
+                        <th className="sorter">Vote</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sliceData.map((vote, index) => (
+                        <tr>
+                          <td>{vote[2]}</td>
+                          <td className="validator-voters">{vote[3]}</td>
+                          <td className="validator-voters">{vote[5]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <Pagination
+                    currentPage={currentPage}
+                    total={180}
+                    limit={20}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}

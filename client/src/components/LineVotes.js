@@ -22,12 +22,12 @@ const LineVotes = () => {
   const [oneData, setOneData] = useState([]);
   const [thirtyData, setThirtyData] = useState([]);
 
-  const [thirtyState, setThirtyState] = useState(true);
-  const [ninetyState, setNinetyState] = useState(false);
+  const [thirtyState, setThirtyState] = useState(false);
+  const [ninetyState, setNinetyState] = useState(true);
   const [oneState, setOneState] = useState(false);
 
-  const [active1, setActive1] = useState(true);
-  const [active2, setActive2] = useState(false);
+  const [active1, setActive1] = useState(false);
+  const [active2, setActive2] = useState(true);
   const [active3, setActive3] = useState(false);
 
   const thirtyHandler = () => {
@@ -224,7 +224,7 @@ const LineVotes = () => {
   }, []);
 
   return (
-    <div className="single-main">
+    <div className="single-main-leader">
       {loading ? (
         <div className="loader-blank"></div>
       ) : (

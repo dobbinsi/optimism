@@ -88,7 +88,7 @@ function App() {
         {loading ? (
           <div className="loader-blank" style={style}>
             <BounceLoader color="#ff1420" size={150} />
-            <h4>Fetching Data...</h4>
+            <h3>Fetching Data...</h3>
           </div>
         ) : (
           <>
