@@ -23,12 +23,12 @@ const LineVotes = () => {
   const [thirtyData, setThirtyData] = useState([]);
 
   const [thirtyState, setThirtyState] = useState(false);
-  const [ninetyState, setNinetyState] = useState(true);
-  const [oneState, setOneState] = useState(false);
+  const [ninetyState, setNinetyState] = useState(false);
+  const [oneState, setOneState] = useState(true);
 
   const [active1, setActive1] = useState(false);
-  const [active2, setActive2] = useState(true);
-  const [active3, setActive3] = useState(false);
+  const [active2, setActive2] = useState(false);
+  const [active3, setActive3] = useState(true);
 
   const thirtyHandler = () => {
     setThirtyState(true);

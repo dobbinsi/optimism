@@ -21,7 +21,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
 const Values = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [value, setValue] = useState("data and analytics");
 
@@ -86,7 +86,7 @@ const Values = () => {
     },
     plugins: {
       legend: {
-        position: "",
+        position: "bottom",
       },
       title: {
         display: true,
@@ -200,8 +200,12 @@ const Values = () => {
           </FormControl>
         </div>
         {loading ? (
-          <div className="chart-area">
-            <ClipLoader className="spinner" size={50} speedMultiplier={0.75} />
+          <div className="chart-area-values">
+            <ClipLoader
+              className="spinner-values"
+              size={50}
+              speedMultiplier={0.75}
+            />
           </div>
         ) : (
           <div className="chart-area">

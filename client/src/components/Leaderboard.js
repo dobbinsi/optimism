@@ -379,48 +379,56 @@ const Leaderboard = () => {
                   <th className="sorter">OP Tokens Delegated</th>
                 </tr>
               </thead>
-              {loading ? (
-                <ClipLoader
-                  className="spinner"
-                  size={50}
-                  speedMultiplier={0.75}
-                />
-              ) : (
-                <tbody>
-                  {sliceDelegatorData.map((delegate, index) => (
-                    <tr>
-                      <td
-                        className="delegator-mode"
-                        onClick={(e) => {
-                          delegatorHandler();
-                          setDName(`${delegate[1]}`);
-                          setLoading(true);
-                        }}
-                      >
-                        {delegate[1]}
-                      </td>
-                      <td className="validator-shares">
-                        <a
-                          href={"https://etherscan.io/address/".concat(
-                            delegate[2]
-                          )}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="table-links"
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan={6}>
+                      <div className="chart-area-values">
+                        <ClipLoader
+                          className="spinner-values"
+                          size={50}
+                          speedMultiplier={0.75}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  <>
+                    {sliceDelegatorData.map((delegate, index) => (
+                      <tr>
+                        <td
+                          className="delegator-mode"
+                          onClick={(e) => {
+                            delegatorHandler();
+                            setDName(`${delegate[1]}`);
+                            setLoading(true);
+                          }}
                         >
-                          {delegate[2]}
-                        </a>
-                      </td>
-                      <td className="validator-shares">
-                        {delegate[3].toLocaleString(undefined, {
-                          maximumFractionDigits: 0,
-                          minimumIntegerDigits: 2,
-                        })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              )}
+                          {delegate[1]}
+                        </td>
+                        <td className="validator-shares">
+                          <a
+                            href={"https://etherscan.io/address/".concat(
+                              delegate[2]
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="table-links"
+                          >
+                            {delegate[2]}
+                          </a>
+                        </td>
+                        <td className="validator-shares">
+                          {delegate[3].toLocaleString(undefined, {
+                            maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
+                          })}
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                )}
+              </tbody>
             </table>
             <Pagination
               currentPage={currentPage}

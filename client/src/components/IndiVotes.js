@@ -189,23 +189,31 @@ const IndiVotes = () => {
                     <th className="sorter">Vote</th>
                   </tr>
                 </thead>
-                {loading ? (
-                  <ClipLoader
-                    className="spinner"
-                    size={50}
-                    speedMultiplier={0.75}
-                  />
-                ) : (
-                  <tbody>
-                    {sliceData.map((vote, index) => (
-                      <tr>
-                        <td>{vote[2]}</td>
-                        <td className="validator-voters">{vote[3]}</td>
-                        <td className="validator-voters">{vote[5]}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                )}
+                <tbody>
+                  {loading ? (
+                    <tr>
+                      <td colSpan={3}>
+                        <div className="chart-area-values">
+                          <ClipLoader
+                            className="spinner-values"
+                            size={50}
+                            speedMultiplier={0.75}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    <>
+                      {sliceData.map((vote, index) => (
+                        <tr>
+                          <td>{vote[2]}</td>
+                          <td className="validator-voters">{vote[3]}</td>
+                          <td className="validator-voters">{vote[5]}</td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
+                </tbody>
               </table>
               <Pagination
                 currentPage={currentPage}

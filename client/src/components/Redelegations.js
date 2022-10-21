@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  LogarithmicScale,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
@@ -93,7 +94,8 @@ const Redelegations = () => {
     PointElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    LogarithmicScale
   );
 
   const chartOptions = {
@@ -124,7 +126,7 @@ const Redelegations = () => {
     },
     plugins: {
       legend: {
-        position: "",
+        position: "bottom",
       },
       title: {
         display: true,
@@ -138,18 +140,65 @@ const Redelegations = () => {
     },
   };
 
+  const chartOptions2 = {
+    responsive: true,
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            family: "'Rubik', sans-serif",
+          },
+          color: "#8b949e",
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        min: 1000,
+        max: 10000000,
+        stepSize: 10000,
+        ticks: {
+          font: {
+            family: "'Rubik', sans-serif",
+          },
+          color: "#8b949e",
+        },
+        grid: {
+          display: false,
+        },
+        // display: true,
+        type: "logarithmic",
+      },
+    },
+    plugins: {
+      legend: {
+        position: "bottom",
+      },
+      title: {
+        display: true,
+        text: "Total OP Tokens Delegated - Log Scale",
+        font: {
+          size: 18,
+          family: "'Rubik', sans-serif",
+          weight: "lighter",
+        },
+      },
+    },
+  };
+
   const chartData30 = {
     labels: chartDates30,
     datasets: [
       {
-        label: "Delegations (OP)",
+        label: "OP Delegated",
         data: chartAmounts30Tot,
         backgroundColor: "#ff1420",
         borderColor: ["#3d4147"],
         borderWidth: 1.5,
       },
       {
-        label: "Re-Delegations (OP)",
+        label: "OP Re-Delegated",
         data: chartAmounts30Re,
         backgroundColor: "#99a7bc",
         borderColor: ["#3d4147"],
@@ -162,14 +211,14 @@ const Redelegations = () => {
     labels: chartDates90,
     datasets: [
       {
-        label: "Delegations (OP)",
+        label: "OP Delegated",
         data: chartAmounts90Tot,
         backgroundColor: "#ff1420",
         borderColor: ["#3d4147"],
         borderWidth: 0.75,
       },
       {
-        label: "Re-Delegations (OP)",
+        label: "OP Re-Delegated",
         data: chartAmounts90Re,
         backgroundColor: "#99a7bc",
         borderColor: ["#3d4147"],
@@ -182,14 +231,14 @@ const Redelegations = () => {
     labels: chartDates180,
     datasets: [
       {
-        label: "Delegations (OP)",
+        label: "OP Delegated",
         data: chartAmounts180Tot,
         backgroundColor: "#ff1420",
         borderColor: ["#3d4147"],
         borderWidth: 0.75,
       },
       {
-        label: "Re-Delegations (OP)",
+        label: "OP Re-Delegated",
         data: chartAmounts180Re,
         backgroundColor: "#99a7bc",
         borderColor: ["#3d4147"],
@@ -348,7 +397,7 @@ const Redelegations = () => {
           )}
           {oneState && (
             <div className="chart-area">
-              <Bar options={chartOptions} data={chartData180} />
+              <Bar options={chartOptions2} data={chartData180} />
             </div>
           )}
         </>

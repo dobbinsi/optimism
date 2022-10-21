@@ -55,7 +55,7 @@ function App() {
               alt="optimism"
             />{" "}
           </a>
-          <h1>Governance Data</h1>
+          <h1 className="header-bigtxt">Governance Data</h1>
         </div>
         <div className="header-nav">
           <a

@@ -14,7 +14,7 @@ const Double = () => {
   const [thirtyState, setThirtyState] = useState(true);
   const [sixtyState, setSixtyState] = useState(false);
   const [ninetyState, setNinetyState] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [active1, setActive1] = useState(true);
   const [active2, setActive2] = useState(false);
   const [active3, setActive3] = useState(false);
@@ -178,39 +178,47 @@ const Double = () => {
                     <th>OP Tokens</th>
                   </tr>
                 </thead>
-                {loading ? (
-                  <ClipLoader
-                    className="spinner"
-                    size={50}
-                    speedMultiplier={0.75}
-                  />
-                ) : (
-                  <tbody>
-                    {reverse30In.map((delegate, index) => (
-                      <tr>
-                        <td>
-                          <a
-                            href={"https://etherscan.io/address/".concat(
-                              delegate[0]
-                            )}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="table-links"
-                          >
-                            {delegate[1]}
-                          </a>
-                        </td>
-                        <td className="validator-voters">
-                          {delegate[2].toLocaleString(undefined, {
-                            minimumIntegerDigits: 2,
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                )}
+                <tbody>
+                  {loading ? (
+                    <tr>
+                      <td colSpan={2}>
+                        <div className="chart-area-values">
+                          <ClipLoader
+                            className="spinner-values"
+                            size={50}
+                            speedMultiplier={0.75}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    <>
+                      {reverse30In.map((delegate, index) => (
+                        <tr>
+                          <td>
+                            <a
+                              href={"https://etherscan.io/address/".concat(
+                                delegate[0]
+                              )}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="table-links"
+                            >
+                              {delegate[1]}
+                            </a>
+                          </td>
+                          <td className="validator-voters">
+                            {delegate[2].toLocaleString(undefined, {
+                              minimumIntegerDigits: 2,
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
+                </tbody>
               </table>
               <h2 className="sum-flows-text">Total OP Tokens Gained:</h2>
               <h2 className="sum-flows">
@@ -330,39 +338,47 @@ const Double = () => {
                     <th>OP Tokens</th>
                   </tr>
                 </thead>
-                {loading ? (
-                  <ClipLoader
-                    className="spinner"
-                    size={50}
-                    speedMultiplier={0.75}
-                  />
-                ) : (
-                  <tbody>
-                    {slice30Out.map((delegate, index) => (
-                      <tr>
-                        <td>
-                          <a
-                            href={"https://etherscan.io/address/".concat(
-                              delegate[0]
-                            )}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="table-links"
-                          >
-                            {delegate[1]}
-                          </a>
-                        </td>
-                        <td className="validator-voters">
-                          {delegate[2].toLocaleString(undefined, {
-                            minimumIntegerDigits: 2,
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                )}
+                <tbody>
+                  {loading ? (
+                    <tr>
+                      <td colSpan={2}>
+                        <div className="chart-area-values">
+                          <ClipLoader
+                            className="spinner-values"
+                            size={50}
+                            speedMultiplier={0.75}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    <>
+                      {slice30Out.map((delegate, index) => (
+                        <tr>
+                          <td>
+                            <a
+                              href={"https://etherscan.io/address/".concat(
+                                delegate[0]
+                              )}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="table-links"
+                            >
+                              {delegate[1]}
+                            </a>
+                          </td>
+                          <td className="validator-voters">
+                            {delegate[2].toLocaleString(undefined, {
+                              minimumIntegerDigits: 2,
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
+                </tbody>
               </table>
               <h2 className="sum-flows-text">Total OP Tokens Lost:</h2>
               <h2 className="sum-flows-neg">
