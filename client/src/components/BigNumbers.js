@@ -36,7 +36,7 @@ const BigNumbers = () => {
     );
 
     const queryBigNumbers2 = {
-      sql: "WITH most_recent AS (SELECT delegator, block_timestamp, raw_new_balance / POW(10,21) AS op_delegated FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' qualify(ROW_NUMBER() over(PARTITION BY delegator ORDER BY block_timestamp DESC)) = 1) SELECT sum(op_delegated) AS total_OP FROM most_recent",
+      sql: "WITH grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ) SELECT sum(voting_power) AS tot_voting_power FROM grp",
       ttlMinutes: 10,
     };
 
@@ -72,7 +72,7 @@ const BigNumbers = () => {
             maximumFractionDigits: 0,
           })}
         </h1>
-        <h2>Total OP Tokens Delegated</h2>
+        <h2>Total Voting Power Delegated</h2>
       </div>
       <div className="big-numbers">
         <h1>

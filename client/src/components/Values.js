@@ -14,7 +14,6 @@ import { Bar } from "react-chartjs-2";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { InputLabel } from "@material-ui/core";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -22,7 +21,7 @@ const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
 const Values = () => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [valuesData, setValuesData] = useState([]);
   const [value, setValue] = useState("data and analytics");
 
   const handleChange = (event) => {
@@ -30,19 +29,19 @@ const Values = () => {
     setLoading(true);
   };
 
-  const chartLabels = data.map((item) => {
+  const chartLabels = valuesData.map((item) => {
     return item[1];
   });
 
-  const chartData1 = data.map((item) => {
+  const chartData1 = valuesData.map((item) => {
     return item[3];
   });
 
-  const chartData2 = data.map((item) => {
+  const chartData2 = valuesData.map((item) => {
     return item[4];
   });
 
-  const chartData3 = data.map((item) => {
+  const chartData3 = valuesData.map((item) => {
     return item[5];
   });
 
@@ -133,15 +132,17 @@ const Values = () => {
       "https://node-api.flipsidecrypto.com"
     );
 
-    const queryVotes = {
-      sql: `WITH votes AS (SELECT voter AS delegate, proposal_title, CASE WHEN trim(vote_option :: STRING, '["""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '["""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote_option, tag_name AS value FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags ON LOWER(voter) = LOWER(address) WHERE space_id = 'opcollective.eth' AND creator = 'jkhuhnke11' AND tag_type = 'delegate_value' AND blockchain = 'optimism' AND tag_name = '${value}' ), forr AS ( SELECT delegate, count(vote_option) as fors FROM votes WHERE vote_option = 'For' group by delegate ), against AS (SELECT delegate, count(vote_option) as againsts FROM votes WHERE vote_option = 'Against' group by delegate ), abstain AS ( SELECT delegate, count(vote_option) as abstains FROM votes WHERE vote_option = 'Abstain' group by delegate ) SELECT DISTINCT d.delegate, tag_name as delegate_name, value, fors, againsts, abstains FROM votes d INNER JOIN abstain a ON d.delegate = a.delegate INNER JOIN against ag ON d.delegate = ag.delegate INNER JOIN forr f ON d.delegate = f.delegate LEFT OUTER JOIN crosschain.core.address_tags ON LOWER(d.delegate) = LOWER(address) WHERE creator = 'jkhuhnke11' AND tag_type = 'delegate_name' AND blockchain = 'optimism' AND value = '${value}'`,
+    const queryValuesVotes = {
+      sql: `WITH votes AS (SELECT voter AS delegate, proposal_title, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote_option, tag_name AS value FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags ON LOWER(voter) = LOWER(address) WHERE space_id = 'opcollective.eth' AND creator = 'jkhuhnke11' AND tag_type = 'delegate_value' AND blockchain = 'optimism' AND tag_name = '${value}' ), forr AS ( SELECT delegate, count(vote_option) as fors FROM votes WHERE vote_option = 'For' group by delegate ), against AS (SELECT delegate, count(vote_option) as againsts FROM votes WHERE vote_option = 'Against' group by delegate ), abstain AS ( SELECT delegate, count(vote_option) as abstains FROM votes WHERE vote_option = 'Abstain' group by delegate ) SELECT DISTINCT d.delegate, tag_name as delegate_name, value, fors, againsts, abstains FROM votes d INNER JOIN abstain a ON d.delegate = a.delegate INNER JOIN against ag ON d.delegate = ag.delegate INNER JOIN forr f ON d.delegate = f.delegate LEFT OUTER JOIN crosschain.core.address_tags ON LOWER(d.delegate) = LOWER(address) WHERE creator = 'jkhuhnke11' AND tag_type = 'delegate_name' AND blockchain = 'optimism' AND value = '${value}'`,
       ttlMinutes: 10,
     };
 
-    const resultVotes = flipside.query.run(queryVotes).then((records) => {
-      setData(records.rows);
-      setLoading(false);
-    });
+    const resultValuesVotes = flipside.query
+      .run(queryValuesVotes)
+      .then((records) => {
+        setValuesData(records.rows);
+        setLoading(false);
+      });
   }, [value]);
 
   return (

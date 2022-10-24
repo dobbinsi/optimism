@@ -65,8 +65,8 @@ const IndiVotes = () => {
   ];
 
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
+  const [indiData, setIndiData] = useState([]);
+  const [indiData2, setIndiData2] = useState([]);
   const [value, setValue] = useState("Flipside Crypto");
   const [oldSort, setOldSort] = useState(false);
 
@@ -76,8 +76,8 @@ const IndiVotes = () => {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const sliceData = data.slice((currentPage - 1) * 10, currentPage * 10);
-  const sliceData2 = data2.slice((currentPage - 1) * 10, currentPage * 10);
+  const sliceData = indiData.slice((currentPage - 1) * 10, currentPage * 10);
+  const sliceData2 = indiData2.slice((currentPage - 1) * 10, currentPage * 10);
 
   const oldSortHandler = () => {
     setOldSort(!oldSort);
@@ -89,15 +89,17 @@ const IndiVotes = () => {
       "https://node-api.flipsidecrypto.com"
     );
 
-    const queryVotes = {
+    const queryIndiVotes = {
       sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date DESC`,
       ttlMinutes: 10,
     };
 
-    const resultVotes = flipside.query.run(queryVotes).then((records) => {
-      setData(records.rows);
-      setLoading(false);
-    });
+    const resultIndiVotes = flipside.query
+      .run(queryIndiVotes)
+      .then((records) => {
+        setIndiData(records.rows);
+        setLoading(false);
+      });
   }, [value]);
 
   useEffect(() => {
@@ -106,14 +108,16 @@ const IndiVotes = () => {
       "https://node-api.flipsidecrypto.com"
     );
 
-    const queryVotes2 = {
+    const queryIndiVotes2 = {
       sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date ASC`,
       ttlMinutes: 10,
     };
 
-    const resultVotes2 = flipside.query.run(queryVotes2).then((records) => {
-      setData2(records.rows);
-    });
+    const resultIndiVotes2 = flipside.query
+      .run(queryIndiVotes2)
+      .then((records) => {
+        setIndiData2(records.rows);
+      });
   }, [value]);
 
   return (
