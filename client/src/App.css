@@ -313,7 +313,7 @@ th.first-column {
 
 .chart-area-values {
   width: 90%;
-  min-height: 400px;
+  /* min-height: 400px; */
   margin: auto;
   display: flex;
   justify-content: center;
@@ -462,4 +462,9 @@ th.first-column {
   height: 90px;
   width: 90px;
   margin-bottom: 20px;
+}
+
+.load-delegators {
+  text-align: center;
+  margin-top: 10px;
 }

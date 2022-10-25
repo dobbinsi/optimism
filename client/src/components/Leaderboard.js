@@ -345,6 +345,7 @@ const Leaderboard = () => {
                           speedMultiplier={0.75}
                         />
                       </div>
+                      <p className="load-delegators">Loading Individual Delegators</p>
                     </td>
                   </tr>
                 ) : (
