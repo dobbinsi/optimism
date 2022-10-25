@@ -72,7 +72,6 @@ const Leaderboard = () => {
     };
 
     const resultOP = flipside.query.run(queryOP).then((records) => {
-      console.log(records.rows);
       setOPData(records.rows);
     });
   }, []);

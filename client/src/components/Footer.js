@@ -4,17 +4,32 @@ const Footer = () => {
   return (
     <div className="footer">
       <h3>
-        <a href="https://twitter.com/web3_analyst" className="footer-links">
+        <a
+          href="https://twitter.com/web3_analyst"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-links"
+        >
           Jess the Analyst{" "}
         </a>
         &{" "}
-        <a href="https://twitter.com/dawbyinz" className="footer-links">
+        <a
+          href="https://twitter.com/dawbyinz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-links"
+        >
           d0bby
         </a>
       </h3>
       <div className="logo-footer">
         <h2 className="footer-bigtxt">Powered by</h2>
-        <a href="https://flipsidecrypto.xyz/" className="footer-links">
+        <a
+          href="https://flipsidecrypto.xyz/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-links"
+        >
           {" "}
           <img src={flipjawn} className="flipside-logo" alt="flipside" />{" "}
         </a>
@@ -24,4 +39,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

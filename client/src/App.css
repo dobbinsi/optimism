@@ -453,3 +453,13 @@ th.first-column {
     margin-bottom: 40px;
   }
 }
+
+.fallback {
+  text-align: center;
+}
+
+.fallback img {
+  height: 90px;
+  width: 90px;
+  margin-bottom: 20px;
+}
