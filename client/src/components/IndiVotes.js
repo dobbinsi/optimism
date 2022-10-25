@@ -90,7 +90,7 @@ const IndiVotes = () => {
     );
 
     const queryIndiVotes = {
-      sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date DESC`,
+      sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, proposal_id, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date DESC`,
       ttlMinutes: 10,
     };
 
@@ -109,7 +109,7 @@ const IndiVotes = () => {
     );
 
     const queryIndiVotes2 = {
-      sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date ASC`,
+      sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, proposal_id, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date ASC`,
       ttlMinutes: 10,
     };
 
@@ -165,9 +165,20 @@ const IndiVotes = () => {
                 <tbody>
                   {sliceData2.map((vote, index) => (
                     <tr>
-                      <td>{vote[2]}</td>
-                      <td className="validator-voters">{vote[3]}</td>
-                      <td className="validator-voters">{vote[5]}</td>
+                      <td>
+                        <a
+                          href={"https://snapshot.org/#/opcollective.eth/proposal/".concat(
+                            vote[3]
+                          )}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="table-links"
+                        >
+                          {vote[2]}
+                        </a>
+                      </td>
+                      <td className="validator-voters">{vote[4]}</td>
+                      <td className="validator-voters">{vote[6]}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -210,9 +221,20 @@ const IndiVotes = () => {
                     <>
                       {sliceData.map((vote, index) => (
                         <tr>
-                          <td>{vote[2]}</td>
-                          <td className="validator-voters">{vote[3]}</td>
-                          <td className="validator-voters">{vote[5]}</td>
+                          <td>
+                            <a
+                              href={"https://snapshot.org/#/opcollective.eth/proposal/".concat(
+                                vote[3]
+                              )}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="table-links"
+                            >
+                              {vote[2]}
+                            </a>
+                          </td>
+                          <td className="validator-voters">{vote[4]}</td>
+                          <td className="validator-voters">{vote[6]}</td>
                         </tr>
                       ))}
                     </>

@@ -11,7 +11,7 @@ const Leaderboard = () => {
   const [OPData, setOPData] = useState([]);
   const [delData, setDelData] = useState([]);
   const [propsData, setPropsData] = useState([]);
-  const [dName, setDName] = useState("Linda Xie");
+  const [dName, setDName] = useState("");
   const [delegatorData, setDelegatorData] = useState([]);
 
   const [OPSort, setOPSort] = useState(true);
