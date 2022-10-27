@@ -215,6 +215,9 @@ const IndiVotes = () => {
                             speedMultiplier={0.75}
                           />
                         </div>
+                        <p className="load-delegators">
+                          Loading Vote History
+                        </p>
                       </td>
                     </tr>
                   ) : (
