@@ -255,7 +255,7 @@ const Redelegations = () => {
 
     const queryThirtyTot = {
       sql: "SELECT block_timestamp :: date, sum(raw_new_balance) / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations WHERE block_timestamp :: date >= CURRENT_DATE - 30 GROUP BY block_timestamp :: date ORDER BY block_timestamp :: date ASC",
-      ttlMinutes: 10,
+      ttlMinutes: 60,
     };
 
     const resultThirtyTot = flipside.query
@@ -274,7 +274,7 @@ const Redelegations = () => {
 
     const queryThirtyRe = {
       sql: "SELECT block_timestamp :: date, sum(raw_new_balance) / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations WHERE block_timestamp :: date >= CURRENT_DATE - 30 AND delegation_type = 'Re-Delegation' GROUP BY block_timestamp :: date ORDER BY block_timestamp :: date ASC",
-      ttlMinutes: 10,
+      ttlMinutes: 60,
     };
 
     const resultThirtyRe = flipside.query.run(queryThirtyRe).then((records) => {
@@ -291,7 +291,7 @@ const Redelegations = () => {
 
     const queryNinetyTot = {
       sql: "SELECT block_timestamp :: date, sum(raw_new_balance) / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations WHERE block_timestamp :: date >= CURRENT_DATE - 90 GROUP BY block_timestamp :: date ORDER BY block_timestamp :: date ASC",
-      ttlMinutes: 10,
+      ttlMinutes: 60,
     };
 
     const resultNinetyTot = flipside.query
@@ -310,7 +310,7 @@ const Redelegations = () => {
 
     const queryNinetyRe = {
       sql: "SELECT block_timestamp :: date, sum(raw_new_balance) / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations WHERE block_timestamp :: date >= CURRENT_DATE - 90 AND delegation_type = 'Re-Delegation' GROUP BY block_timestamp :: date ORDER BY block_timestamp :: date ASC",
-      ttlMinutes: 10,
+      ttlMinutes: 60,
     };
 
     const resultNinetyRe = flipside.query.run(queryNinetyRe).then((records) => {
@@ -327,7 +327,7 @@ const Redelegations = () => {
 
     const queryOneTot = {
       sql: "SELECT block_timestamp :: date, sum(raw_new_balance) / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations WHERE block_timestamp :: date >= CURRENT_DATE - 180 GROUP BY block_timestamp :: date ORDER BY block_timestamp :: date ASC",
-      ttlMinutes: 10,
+      ttlMinutes: 60,
     };
 
     const resultOneTot = flipside.query.run(queryOneTot).then((records) => {
@@ -344,7 +344,7 @@ const Redelegations = () => {
 
     const queryOneRe = {
       sql: "SELECT block_timestamp :: date, sum(raw_new_balance) / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations WHERE block_timestamp :: date >= CURRENT_DATE - 180 AND delegation_type = 'Re-Delegation' GROUP BY block_timestamp :: date ORDER BY block_timestamp :: date ASC",
-      ttlMinutes: 10,
+      ttlMinutes: 60,
     };
 
     const resultOneRe = flipside.query.run(queryOneRe).then((records) => {
