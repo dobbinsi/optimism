@@ -21,6 +21,7 @@ const LineVotes = () => {
   const [ninetyLineData, setNinetyLineData] = useState([]);
   const [oneLineData, setOneLineData] = useState([]);
   const [thirtyLineData, setThirtyLineData] = useState([]);
+  const [propsData, setPropsData] = useState([]);
 
   const [thirtyState, setThirtyState] = useState(false);
   const [ninetyState, setNinetyState] = useState(false);
@@ -110,6 +111,22 @@ const LineVotes = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const flipside = new Flipside(
+      API_KEY,
+      "https://node-api.flipsidecrypto.com"
+    );
+
+    const queryProps = {
+      sql: "with props as ( select proposal_start_time :: date as date, proposal_id, 1 as num FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' qualify (ROW_NUMBER() over (partition by proposal_id order by vote_timestamp DESC)) = 1 ), pre_final as ( SELECT date, sum(num) over (order by date) as prop_time FROM props ) select date, prop_time from pre_final qualify (ROW_NUMBER() over (partition by date order by prop_time desc)) = 1 ORDER BY date ASC",
+      ttlMinutes: 2,
+    };
+
+    const resultProps = flipside.query.run(queryProps).then((records) => {
+      setPropsData(records.rows);
+    });
+  }, []);
+
   const datesThirty = thirtyLineData.map((item) => {
     return item[0];
   });
@@ -131,6 +148,14 @@ const LineVotes = () => {
   });
 
   const amountsOne = oneLineData.map((item) => {
+    return item[1];
+  });
+
+  const datesProps = propsData.map((item) => {
+    return item[0];
+  });
+
+  const amountsProps = propsData.map((item) => {
     return item[1];
   });
 
@@ -175,7 +200,7 @@ const LineVotes = () => {
       },
       title: {
         display: true,
-        text: "Snapshot Voting Activity Over Time",
+        text: "Snapshot Voting Activity Over Time (Distinct Voters)",
         font: {
           size: 18,
           family: "'Rubik', sans-serif",
@@ -227,6 +252,61 @@ const LineVotes = () => {
     ],
   };
 
+  const propChartOptions = {
+    responsive: true,
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            family: "'Rubik', sans-serif",
+          },
+          minRotation: 45,
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            family: "'Rubik', sans-serif",
+          },
+        },
+        grid: {
+          display: false,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "",
+      },
+      title: {
+        display: true,
+        text: "Cumulative Snapshot Proposals Over Time",
+        font: {
+          size: 18,
+          family: "'Rubik', sans-serif",
+          weight: "lighter",
+        },
+      },
+    },
+  };
+
+  const propChartData = {
+    labels: datesProps,
+    datasets: [
+      {
+        label: "Total Proposals",
+        data: amountsProps,
+        backgroundColor: "#ffdbe0",
+        borderColor: "#ff1420",
+        pointRadius: 2,
+        fill: true,
+      },
+    ],
+  };
+
   return (
     <div className="single-main-leader">
       {loading ? (
@@ -262,16 +342,31 @@ const LineVotes = () => {
           {thirtyState && (
             <div className="chart-area">
               <Line options={chartOptions} data={chartData1} />
+              <Line
+                options={propChartOptions}
+                data={propChartData}
+                className="props-line"
+              />
             </div>
           )}
           {ninetyState && (
             <div className="chart-area">
               <Line options={chartOptions} data={chartData2} />
+              <Line
+                options={propChartOptions}
+                data={propChartData}
+                className="props-line"
+              />
             </div>
           )}
           {oneState && (
             <div className="chart-area">
               <Line options={chartOptions} data={chartData3} />
+              <Line
+                options={propChartOptions}
+                data={propChartData}
+                className="props-line"
+              />
             </div>
           )}
         </>

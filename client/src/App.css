@@ -106,6 +106,8 @@ body {
 }
 
 .big-numbers {
+  width: 250px;
+  max-width: 250px;
   padding: 30px;
   text-align: center;
   margin-bottom: 20px;
@@ -437,13 +439,13 @@ th.first-column {
   }
 }
 
-@media (max-width: 830px) {
+@media (max-width: 870px) {
   .triple {
     margin: auto;
     width: 90%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 20px;
   }
   .big-numbers {
@@ -451,6 +453,12 @@ th.first-column {
     padding: 30px;
     text-align: center;
     margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .header-bigtxt {
+    display: none;
   }
 }
 
@@ -467,4 +475,8 @@ th.first-column {
 .load-delegators {
   text-align: center;
   margin-top: 10px;
+}
+
+.props-line {
+  margin-top: 120px;
 }

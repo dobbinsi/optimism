@@ -5,13 +5,8 @@ import opjawn from "./logos/op_logo.svg";
 import { motion } from "framer-motion";
 import BounceLoader from "react-spinners/BounceLoader";
 import BigNumbers from "./components/BigNumbers";
-// import Footer from "./components/Footer";
 import Leaderboard from "./components/Leaderboard";
 import Redelegations from "./components/Redelegations";
-// import Double from "./components/Double";
-// import LineVotes from "./components/LineVotes";
-// import Values from "./components/Values";
-// import IndiVotes from "./components/IndiVotes";
 import { ErrorBoundary } from "react-error-boundary";
 import Fallback from "./components/Fallback";
 
@@ -40,7 +35,7 @@ function App() {
     );
 
     const queryGate = {
-      sql: "WITH grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ) SELECT sum(voting_power) AS tot_voting_power FROM grp",
+      sql: "WITH num_props_active AS (SELECT ceil(count(distinct proposal_id)*0.1) as num_props FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth'),voted as (SELECT voter, count(distinct id) as props_voted FROM ethereum.core.ez_snapshot GROUP BY voter), active as ( SELECT voter, case when props_voted > num_props THEN 'TRUE' else 'FALSE' END AS is_active FROM voted JOIN num_props_active ) SELECT count(distinct voter) FROM active WHERE is_active = 'TRUE'",
       ttlMinutes: 2,
     };
 
