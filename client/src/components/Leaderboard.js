@@ -17,7 +17,7 @@ const Leaderboard = () => {
   const [OPSort, setOPSort] = useState(true);
   const [propsSort, setPropsSort] = useState(false);
   const [delSort, setDelSort] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [delegatorMode, setDelegatorMode] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -68,11 +68,12 @@ const Leaderboard = () => {
 
     const queryOP = {
       sql: "WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ), grp2 AS ( SELECT current_delegate, count(DISTINCT delegator) AS num_delegating_addresses FROM user_delegations GROUP BY current_delegate ), vp AS ( SELECT sum(voting_power) AS tot_voting_power FROM grp ), sums AS ( SELECT count(DISTINCT delegator) as tot_delegators FROM user_delegations ud INNER JOIN grp s ON ud.current_delegate = s.delegate ), votes AS ( SELECT voter, count(proposal_id) AS num_props_voted FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' GROUP BY voter ) SELECT DENSE_RANK() OVER ( ORDER BY voting_power DESC ) as delegate_rank, delegate AS delegate_address, tag_name, COALESCE(num_props_voted, 0) AS num_props_voted, voting_power as total_op_delegated, voting_power / tot_voting_power * 100 AS percent_voting_power, num_delegating_addresses, num_delegating_addresses / tot_delegators * 100 AS percent_delegating_addresses FROM grp g JOIN sums JOIN vp LEFT JOIN votes ON delegate = LOWER(voter) LEFT OUTER JOIN crosschain.core.address_tags ON delegate = LOWER(address) LEFT OUTER JOIN grp2 gg ON g.delegate = gg.current_delegate WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ORDER BY voting_power DESC",
-      ttlMinutes: 60,
+      ttlMinutes: 2,
     };
 
     const resultOP = flipside.query.run(queryOP).then((records) => {
       setOPData(records.rows);
+      setLoading(false);
     });
   }, []);
 
@@ -84,7 +85,7 @@ const Leaderboard = () => {
 
     const queryDelegators = {
       sql: "WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ), grp2 AS ( SELECT current_delegate, count(DISTINCT delegator) AS num_delegating_addresses FROM user_delegations GROUP BY current_delegate ), vp AS ( SELECT sum(voting_power) AS tot_voting_power FROM grp ), sums AS ( SELECT count(DISTINCT delegator) as tot_delegators FROM user_delegations ud INNER JOIN grp s ON ud.current_delegate = s.delegate ), votes AS ( SELECT voter, count(proposal_id) AS num_props_voted FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' GROUP BY voter ) SELECT DENSE_RANK() OVER ( ORDER BY voting_power DESC ) as delegate_rank, delegate AS delegate_address, tag_name, COALESCE(num_props_voted, 0) AS num_props_voted, voting_power as total_op_delegated, voting_power / tot_voting_power * 100 AS percent_voting_power, num_delegating_addresses, num_delegating_addresses / tot_delegators * 100 AS percent_delegating_addresses FROM grp g JOIN sums JOIN vp LEFT JOIN votes ON delegate = LOWER(voter) LEFT OUTER JOIN crosschain.core.address_tags ON delegate = LOWER(address) LEFT OUTER JOIN grp2 gg ON g.delegate = gg.current_delegate WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ORDER BY num_delegating_addresses DESC",
-      ttlMinutes: 60,
+      ttlMinutes: 2,
     };
 
     const resultDelegators = flipside.query
@@ -102,7 +103,7 @@ const Leaderboard = () => {
 
     const queryProps = {
       sql: "WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ), grp2 AS ( SELECT current_delegate, count(DISTINCT delegator) AS num_delegating_addresses FROM user_delegations GROUP BY current_delegate ), vp AS ( SELECT sum(voting_power) AS tot_voting_power FROM grp ), sums AS ( SELECT count(DISTINCT delegator) as tot_delegators FROM user_delegations ud INNER JOIN grp s ON ud.current_delegate = s.delegate ), votes AS ( SELECT voter, count(proposal_id) AS num_props_voted FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' GROUP BY voter ) SELECT DENSE_RANK() OVER ( ORDER BY voting_power DESC ) as delegate_rank, delegate AS delegate_address, tag_name, COALESCE(num_props_voted, 0) AS num_props_voted, voting_power as total_op_delegated, voting_power / tot_voting_power * 100 AS percent_voting_power, num_delegating_addresses, num_delegating_addresses / tot_delegators * 100 AS percent_delegating_addresses FROM grp g JOIN sums JOIN vp LEFT JOIN votes ON delegate = LOWER(voter) LEFT OUTER JOIN crosschain.core.address_tags ON delegate = LOWER(address) LEFT OUTER JOIN grp2 gg ON g.delegate = gg.current_delegate WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ORDER BY num_props_voted DESC",
-      ttlMinutes: 60,
+      ttlMinutes: 2,
     };
 
     const resultProps = flipside.query.run(queryProps).then((records) => {
@@ -118,7 +119,7 @@ const Leaderboard = () => {
 
     const queryDelegators2 = {
       sql: `WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), most_recent AS ( SELECT delegator, block_timestamp, raw_new_balance / POW(10,21) AS op_delegated FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' qualify(ROW_NUMBER() over(PARTITION BY delegator ORDER BY block_timestamp DESC)) = 1 ) SELECT current_delegate AS delegate_address, tag_name, d.delegator, op_delegated FROM user_delegations d LEFT OUTER JOIN most_recent m ON d.delegator = m.delegator LEFT OUTER JOIN crosschain.core.address_tags ON current_delegate = LOWER(address) WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' AND tag_name = '${dName}' ORDER BY OP_DELEGATED DESC LIMIT 100;`,
-      ttlMinutes: 60,
+      ttlMinutes: 2,
     };
 
     const resultDelegators2 = flipside.query
@@ -171,50 +172,69 @@ const Leaderboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {sliceProps.map((delegate, index) => (
+                {loading ? (
                   <tr>
-                    <td className="validator-shares">{delegate[0]}</td>
-                    <td
-                      className="delegator-mode"
-                      onClick={(e) => {
-                        delegatorHandler();
-                        setDName(`${delegate[2]}`);
-                        setLoading(true);
-                      }}
-                    >
-                      {delegate[2]}
-                    </td>
-                    <td className="validator-voters">
-                      {delegate[3].toLocaleString(undefined, {
-                        minimumIntegerDigits: 2,
-                      })}
-                    </td>
-                    <td className="validator-shares">
-                      {delegate[4].toLocaleString(undefined, {
-                        maximumFractionDigits: 0,
-                        minimumIntegerDigits: 2,
-                      })}
-                    </td>
-                    <td className="validator-shares">
-                      {delegate[5].toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                    </td>
-                    <td className="validator-shares">
-                      {delegate[6].toLocaleString(undefined, {
-                        maximumFractionDigits: 0,
-                        minimumIntegerDigits: 2,
-                      })}
-                    </td>
-                    <td className="validator-shares">
-                      {delegate[7].toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                    <td colSpan={6}>
+                      <div className="chart-area-values">
+                        <ClipLoader
+                          className="spinner-values"
+                          size={50}
+                          speedMultiplier={0.75}
+                        />
+                      </div>
+                      <p className="load-delegators">
+                        Loading Individual Delegators
+                      </p>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  <>
+                    {sliceProps.map((delegate, index) => (
+                      <tr>
+                        <td className="validator-shares">{delegate[0]}</td>
+                        <td
+                          className="delegator-mode"
+                          onClick={(e) => {
+                            delegatorHandler();
+                            setDName(`${delegate[2]}`);
+                            setLoading(true);
+                          }}
+                        >
+                          {delegate[2]}
+                        </td>
+                        <td className="validator-voters">
+                          {delegate[3].toLocaleString(undefined, {
+                            minimumIntegerDigits: 2,
+                          })}
+                        </td>
+                        <td className="validator-shares">
+                          {delegate[4].toLocaleString(undefined, {
+                            maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
+                          })}
+                        </td>
+                        <td className="validator-shares">
+                          {delegate[5].toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </td>
+                        <td className="validator-shares">
+                          {delegate[6].toLocaleString(undefined, {
+                            maximumFractionDigits: 0,
+                            minimumIntegerDigits: 2,
+                          })}
+                        </td>
+                        <td className="validator-shares">
+                          {delegate[7].toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                )}
               </tbody>
             </table>
             <Pagination
@@ -345,7 +365,9 @@ const Leaderboard = () => {
                           speedMultiplier={0.75}
                         />
                       </div>
-                      <p className="load-delegators">Loading Individual Delegators</p>
+                      <p className="load-delegators">
+                        Loading Individual Delegators
+                      </p>
                     </td>
                   </tr>
                 ) : (

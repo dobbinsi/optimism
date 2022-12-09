@@ -65,7 +65,7 @@ const LineVotes = () => {
 
     const queryThirtyLine = {
       sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 30 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 60,
+      ttlMinutes: 2,
     };
 
     const resultThirtyLine = flipside.query
@@ -84,7 +84,7 @@ const LineVotes = () => {
 
     const queryNinetyLine = {
       sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 90 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 60,
+      ttlMinutes: 2,
     };
 
     const resultNinetyLine = flipside.query
@@ -102,7 +102,7 @@ const LineVotes = () => {
 
     const queryOneLine = {
       sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 180 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 60,
+      ttlMinutes: 2,
     };
 
     const resultOneLine = flipside.query.run(queryOneLine).then((records) => {
