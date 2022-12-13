@@ -66,7 +66,7 @@ const LineVotes = () => {
 
     const queryThirtyLine = {
       sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 30 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 1,
+      ttlMinutes: 60,
     };
 
     const resultThirtyLine = flipside.query
@@ -85,7 +85,7 @@ const LineVotes = () => {
 
     const queryNinetyLine = {
       sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 90 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 1,
+      ttlMinutes: 60,
     };
 
     const resultNinetyLine = flipside.query
@@ -103,7 +103,7 @@ const LineVotes = () => {
 
     const queryOneLine = {
       sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 180 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 1,
+      ttlMinutes: 60,
     };
 
     const resultOneLine = flipside.query.run(queryOneLine).then((records) => {
@@ -119,7 +119,7 @@ const LineVotes = () => {
 
     const queryProps = {
       sql: "with props as ( select proposal_start_time :: date as date, proposal_id, 1 as num FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' qualify (ROW_NUMBER() over (partition by proposal_id order by vote_timestamp DESC)) = 1 ), pre_final as ( SELECT date, sum(num) over (order by date) as prop_time FROM props ) select date, prop_time from pre_final qualify (ROW_NUMBER() over (partition by date order by prop_time desc)) = 1 ORDER BY date ASC",
-      ttlMinutes: 1,
+      ttlMinutes: 60,
     };
 
     const resultProps = flipside.query.run(queryProps).then((records) => {
