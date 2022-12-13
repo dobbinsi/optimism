@@ -92,7 +92,7 @@ const IndiVotes = () => {
 
     const queryIndiVotes = {
       sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, proposal_id, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date DESC`,
-      ttlMinutes: 60,
+      ttlMinutes: 1,
     };
 
     const resultIndiVotes = flipside.query
@@ -111,7 +111,7 @@ const IndiVotes = () => {
 
     const queryIndiVotes2 = {
       sql: `SELECT voter AS delegate, tt.tag_name AS delegate_name, proposal_title, proposal_id, vote_timestamp :: date AS date, trim(vote_option :: STRING, '[""]') as vote_option, CASE WHEN trim(vote_option :: STRING, '[""]') = 1 THEN 'For' WHEN trim(vote_option :: STRING, '[""]') = 2 THEN 'Against' ELSE 'Abstain' END AS vote FROM ethereum.core.ez_snapshot LEFT OUTER JOIN crosschain.core.address_tags tt ON LOWER(voter) = LOWER(tt.address) WHERE space_id = 'opcollective.eth' AND tt.creator = 'jkhuhnke11' AND tt.blockchain = 'optimism' AND delegate_name = '${value}' ORDER BY date ASC`,
-      ttlMinutes: 60,
+      ttlMinutes: 1,
     };
 
     const resultIndiVotes2 = flipside.query

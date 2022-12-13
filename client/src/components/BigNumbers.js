@@ -27,7 +27,7 @@ const BigNumbers = () => {
 
     const queryBigNumbers1 = {
       sql: "SELECT count(DISTINCT delegator) FROM optimism.core.fact_delegations",
-      ttlMinutes: 60,
+      ttlMinutes: 1,
     };
 
     const resultBigNumbers1 = flipside.query
@@ -45,7 +45,7 @@ const BigNumbers = () => {
 
     const queryBigNumbers2 = {
       sql: "WITH grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ) SELECT sum(voting_power) AS tot_voting_power FROM grp",
-      ttlMinutes: 60,
+      ttlMinutes: 1,
     };
 
     const resultBigNumbers2 = flipside.query
@@ -55,59 +55,59 @@ const BigNumbers = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
 
-    const queryBigNumbers7 = {
-      sql: "WITH num_props_active AS (SELECT ceil(count(distinct proposal_id)*0.1) as num_props FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth'),voted as (SELECT voter, count(distinct id) as props_voted FROM ethereum.core.ez_snapshot GROUP BY voter), active as ( SELECT voter, case when props_voted > num_props THEN 'TRUE' else 'FALSE' END AS is_active FROM voted JOIN num_props_active ) SELECT count(distinct voter) FROM active WHERE is_active = 'TRUE'",
-      ttlMinutes: 60,
-    };
+  //   const queryBigNumbers7 = {
+  //     sql: "WITH num_props_active AS (SELECT ceil(count(distinct proposal_id)*0.1) as num_props FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth'),voted as (SELECT voter, count(distinct id) as props_voted FROM ethereum.core.ez_snapshot GROUP BY voter), active as ( SELECT voter, case when props_voted > num_props THEN 'TRUE' else 'FALSE' END AS is_active FROM voted JOIN num_props_active ) SELECT count(distinct voter) FROM active WHERE is_active = 'TRUE'",
+  //     ttlMinutes: 60,
+  //   };
 
-    const resultBigNumbers7 = flipside.query
-      .run(queryBigNumbers7)
-      .then((records) => {
-        setUniqueVoters(records.rows[0][0]);
-      });
-  }, []);
+  //   const resultBigNumbers7 = flipside.query
+  //     .run(queryBigNumbers7)
+  //     .then((records) => {
+  //       setUniqueVoters(records.rows[0][0]);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
 
-    const queryBigNumbers8 = {
-      sql: "SELECT count(distinct proposal_id) as num_props FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth'",
-      ttlMinutes: 60,
-    };
+  //   const queryBigNumbers8 = {
+  //     sql: "SELECT count(distinct proposal_id) as num_props FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth'",
+  //     ttlMinutes: 60,
+  //   };
 
-    const resultBigNumbers8 = flipside.query
-      .run(queryBigNumbers8)
-      .then((records) => {
-        setPropsVoted(records.rows[0][0]);
-      });
-  }, []);
+  //   const resultBigNumbers8 = flipside.query
+  //     .run(queryBigNumbers8)
+  //     .then((records) => {
+  //       setPropsVoted(records.rows[0][0]);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
 
-    const queryBigNumbers9 = {
-      sql: "WITH num_props_active AS ( SELECT ceil(count(distinct proposal_id)*0.1) as num_props FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' ),voted as ( SELECT voter, count(distinct id) as props_voted FROM ethereum.core.ez_snapshot GROUP BY voter ), active as ( SELECT voter, case when props_voted > num_props THEN 'TRUE' else 'FALSE' END AS is_active FROM voted a JOIN num_props_active INNER JOIN crosschain.core.address_tags t ON t.address = LOWER(voter) WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ) SELECT count(distinct voter) as delegate FROM active WHERE is_active = 'TRUE'",
-      ttlMinutes: 60,
-    };
+  //   const queryBigNumbers9 = {
+  //     sql: "WITH num_props_active AS ( SELECT ceil(count(distinct proposal_id)*0.1) as num_props FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' ),voted as ( SELECT voter, count(distinct id) as props_voted FROM ethereum.core.ez_snapshot GROUP BY voter ), active as ( SELECT voter, case when props_voted > num_props THEN 'TRUE' else 'FALSE' END AS is_active FROM voted a JOIN num_props_active INNER JOIN crosschain.core.address_tags t ON t.address = LOWER(voter) WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ) SELECT count(distinct voter) as delegate FROM active WHERE is_active = 'TRUE'",
+  //     ttlMinutes: 60,
+  //   };
 
-    const resultBigNumbers9 = flipside.query
-      .run(queryBigNumbers9)
-      .then((records) => {
-        setActiveDelegates(records.rows[0][0]);
-      });
-  }, []);
+  //   const resultBigNumbers9 = flipside.query
+  //     .run(queryBigNumbers9)
+  //     .then((records) => {
+  //       setActiveDelegates(records.rows[0][0]);
+  //     });
+  // }, []);
 
   useEffect(() => {
     axios
@@ -120,7 +120,7 @@ const BigNumbers = () => {
 
   return (
     <div>
-      <div className="triple">
+      {/* <div className="triple">
         <div className="big-numbers">
           <h1>
             {uniqueVoters.toLocaleString(undefined, {
@@ -150,7 +150,7 @@ const BigNumbers = () => {
             </Tooltip>
           </h2>
         </div>
-      </div>
+      </div> */}
       <div className="triple">
         <div className="big-numbers">
           <h1>

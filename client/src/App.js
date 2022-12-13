@@ -9,6 +9,7 @@ import Leaderboard from "./components/Leaderboard";
 import Redelegations from "./components/Redelegations";
 import { ErrorBoundary } from "react-error-boundary";
 import Fallback from "./components/Fallback";
+import BigNum2 from "./components/BigNum2";
 
 const Double = lazy(() => import("./components/Double"));
 const LineVotes = lazy(() => import("./components/LineVotes"));
@@ -105,6 +106,7 @@ function App() {
         ) : (
           <>
             <ErrorBoundary FallbackComponent={Fallback} onError={errorHandler}>
+              <BigNum2 />
               <BigNumbers />
               <Leaderboard />
               <Redelegations />

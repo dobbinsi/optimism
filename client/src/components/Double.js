@@ -54,7 +54,7 @@ const Double = () => {
 
     const queryThirtyDouble = {
       sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 30 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
-      ttlMinutes: 60,
+      ttlMinutes: 1,
     };
 
     const resultThirtyDouble = flipside.query
@@ -73,7 +73,7 @@ const Double = () => {
 
     const querySixtyDouble = {
       sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 60 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
-      ttlMinutes: 60,
+      ttlMinutes: 1,
     };
 
     const resultSixtyDouble = flipside.query
@@ -91,7 +91,7 @@ const Double = () => {
 
     const queryNinetyDouble = {
       sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 90 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
-      ttlMinutes: 60,
+      ttlMinutes: 1,
     };
 
     const resultNinetyDouble = flipside.query
