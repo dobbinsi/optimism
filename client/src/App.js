@@ -109,8 +109,8 @@ function App() {
               <BigNum2 />
               <BigNumbers />
               <Leaderboard />
-              <Redelegations />
               <Suspense fallback={<BounceLoader color="#ff1420" size={150} />}>
+                <Redelegations />
                 <Double />
                 <LineVotes />
                 <Values />
