@@ -10,6 +10,7 @@ import Redelegations from "./components/Redelegations";
 import { ErrorBoundary } from "react-error-boundary";
 import Fallback from "./components/Fallback";
 import BigNum2 from "./components/BigNum2";
+import { Analytics } from "@vercel/analytics/react";
 
 const Double = lazy(() => import("./components/Double"));
 const LineVotes = lazy(() => import("./components/LineVotes"));
@@ -118,6 +119,7 @@ function App() {
                 <Footer />
               </Suspense>
             </ErrorBoundary>
+            <Analytics />
           </>
         )}
       </div>

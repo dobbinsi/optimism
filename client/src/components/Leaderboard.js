@@ -17,7 +17,7 @@ const Leaderboard = () => {
   const [OPSort, setOPSort] = useState(true);
   const [propsSort, setPropsSort] = useState(false);
   const [delSort, setDelSort] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [delegatorMode, setDelegatorMode] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -172,69 +172,50 @@ const Leaderboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {loading ? (
+                {sliceProps.map((delegate, index) => (
                   <tr>
-                    <td colSpan={6}>
-                      <div className="chart-area-values">
-                        <ClipLoader
-                          className="spinner-values"
-                          size={50}
-                          speedMultiplier={0.75}
-                        />
-                      </div>
-                      <p className="load-delegators">
-                        Loading Individual Delegators
-                      </p>
+                    <td className="validator-shares">{delegate[0]}</td>
+                    <td
+                      className="delegator-mode"
+                      onClick={(e) => {
+                        delegatorHandler();
+                        setDName(`${delegate[2]}`);
+                        setLoading(true);
+                      }}
+                    >
+                      {delegate[2]}
+                    </td>
+                    <td className="validator-voters">
+                      {delegate[3].toLocaleString(undefined, {
+                        minimumIntegerDigits: 2,
+                      })}
+                    </td>
+                    <td className="validator-shares">
+                      {delegate[4].toLocaleString(undefined, {
+                        maximumFractionDigits: 0,
+                        minimumIntegerDigits: 2,
+                      })}
+                    </td>
+                    <td className="validator-shares">
+                      {delegate[5].toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </td>
+                    <td className="validator-shares">
+                      {delegate[6].toLocaleString(undefined, {
+                        maximumFractionDigits: 0,
+                        minimumIntegerDigits: 2,
+                      })}
+                    </td>
+                    <td className="validator-shares">
+                      {delegate[7].toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
                   </tr>
-                ) : (
-                  <>
-                    {sliceProps.map((delegate, index) => (
-                      <tr>
-                        <td className="validator-shares">{delegate[0]}</td>
-                        <td
-                          className="delegator-mode"
-                          onClick={(e) => {
-                            delegatorHandler();
-                            setDName(`${delegate[2]}`);
-                            setLoading(true);
-                          }}
-                        >
-                          {delegate[2]}
-                        </td>
-                        <td className="validator-voters">
-                          {delegate[3].toLocaleString(undefined, {
-                            minimumIntegerDigits: 2,
-                          })}
-                        </td>
-                        <td className="validator-shares">
-                          {delegate[4].toLocaleString(undefined, {
-                            maximumFractionDigits: 0,
-                            minimumIntegerDigits: 2,
-                          })}
-                        </td>
-                        <td className="validator-shares">
-                          {delegate[5].toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                        </td>
-                        <td className="validator-shares">
-                          {delegate[6].toLocaleString(undefined, {
-                            maximumFractionDigits: 0,
-                            minimumIntegerDigits: 2,
-                          })}
-                        </td>
-                        <td className="validator-shares">
-                          {delegate[7].toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                        </td>
-                      </tr>
-                    ))}
-                  </>
-                )}
+                ))}
               </tbody>
             </table>
             <Pagination
