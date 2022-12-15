@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Flipside } from "@flipsidecrypto/sdk";
 import Pagination from "./Pagination";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -8,6 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
 const Leaderboard = () => {
+  const notInitialRender = useRef(false);
   const [OPData, setOPData] = useState([]);
   const [delData, setDelData] = useState([]);
   const [propsData, setPropsData] = useState([]);
@@ -66,6 +67,30 @@ const Leaderboard = () => {
       "https://node-api.flipsidecrypto.com"
     );
 
+    const queryDelegators2 = {
+      sql: `WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), most_recent AS ( SELECT delegator, block_timestamp, raw_new_balance / POW(10,21) AS op_delegated FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' qualify(ROW_NUMBER() over(PARTITION BY delegator ORDER BY block_timestamp DESC)) = 1 ) SELECT current_delegate AS delegate_address, tag_name, d.delegator, op_delegated FROM user_delegations d LEFT OUTER JOIN most_recent m ON d.delegator = m.delegator LEFT OUTER JOIN crosschain.core.address_tags ON current_delegate = LOWER(address) WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' AND tag_name = '${dName}' ORDER BY OP_DELEGATED DESC LIMIT 100;`,
+      ttlMinutes: 60,
+    };
+
+    if (notInitialRender.current) {
+      const resultDelegators2 = flipside.query
+        .run(queryDelegators2)
+        .then((records) => {
+          setDelegatorData(records.rows);
+          setLoading(false);
+        });
+    }
+    return () => {
+      notInitialRender.current = true;
+    };
+  }, [dName]);
+
+  useEffect(() => {
+    const flipside = new Flipside(
+      API_KEY,
+      "https://node-api.flipsidecrypto.com"
+    );
+
     const queryOP = {
       sql: "WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ), grp2 AS ( SELECT current_delegate, count(DISTINCT delegator) AS num_delegating_addresses FROM user_delegations GROUP BY current_delegate ), vp AS ( SELECT sum(voting_power) AS tot_voting_power FROM grp ), sums AS ( SELECT count(DISTINCT delegator) as tot_delegators FROM user_delegations ud INNER JOIN grp s ON ud.current_delegate = s.delegate ), votes AS ( SELECT voter, count(proposal_id) AS num_props_voted FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' GROUP BY voter ) SELECT DENSE_RANK() OVER ( ORDER BY voting_power DESC ) as delegate_rank, delegate AS delegate_address, tag_name, COALESCE(num_props_voted, 0) AS num_props_voted, voting_power as total_op_delegated, voting_power / tot_voting_power * 100 AS percent_voting_power, num_delegating_addresses, num_delegating_addresses / tot_delegators * 100 AS percent_delegating_addresses FROM grp g JOIN sums JOIN vp LEFT JOIN votes ON delegate = LOWER(voter) LEFT OUTER JOIN crosschain.core.address_tags ON delegate = LOWER(address) LEFT OUTER JOIN grp2 gg ON g.delegate = gg.current_delegate WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ORDER BY voting_power DESC",
       ttlMinutes: 60,
@@ -110,25 +135,6 @@ const Leaderboard = () => {
       setPropsData(records.rows);
     });
   }, []);
-
-  useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
-
-    const queryDelegators2 = {
-      sql: `WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), most_recent AS ( SELECT delegator, block_timestamp, raw_new_balance / POW(10,21) AS op_delegated FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' qualify(ROW_NUMBER() over(PARTITION BY delegator ORDER BY block_timestamp DESC)) = 1 ) SELECT current_delegate AS delegate_address, tag_name, d.delegator, op_delegated FROM user_delegations d LEFT OUTER JOIN most_recent m ON d.delegator = m.delegator LEFT OUTER JOIN crosschain.core.address_tags ON current_delegate = LOWER(address) WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' AND tag_name = '${dName}' ORDER BY OP_DELEGATED DESC LIMIT 100;`,
-      ttlMinutes: 60,
-    };
-
-    const resultDelegators2 = flipside.query
-      .run(queryDelegators2)
-      .then((records) => {
-        setDelegatorData(records.rows);
-        setLoading(false);
-      });
-  }, [dName]);
 
   return (
     <div className="single-main-leader">
