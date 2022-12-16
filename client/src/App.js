@@ -110,7 +110,7 @@ function App() {
               <BigNum2 />
               <BigNumbers />
               <Leaderboard />
-              <Suspense fallback={<BounceLoader color="#ff1420" size={150} />}>
+              <Suspense>
                 <Redelegations />
                 <Double />
                 <LineVotes />
