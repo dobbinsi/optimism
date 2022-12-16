@@ -1,50 +1,72 @@
 import React, { useState, useEffect } from "react";
-import { Flipside } from "@flipsidecrypto/sdk";
+// import { Flipside } from "@flipsidecrypto/sdk";
 import axios from "axios";
 
-const API_KEY = `${process.env.REACT_APP_API_KEY}`;
+// const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 const BigNumbers = () => {
   const [delegators, setDelegators] = useState([]);
   const [tokensDelegated, setTokensDelegated] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [circSupply, setCircSupply] = useState([]);
   const percentCirculating = (tokensDelegated / circSupply) * 100;
 
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
+
+  //   const queryBigNumbers1 = {
+  //     sql: "SELECT count(DISTINCT delegator) FROM optimism.core.fact_delegations",
+  //     ttlMinutes: 1,
+  //   };
+
+  //   const resultBigNumbers1 = flipside.query
+  //     .run(queryBigNumbers1)
+  //     .then((records) => {
+  //       setDelegators(records.rows[0][0]);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
-
-    const queryBigNumbers1 = {
-      sql: "SELECT count(DISTINCT delegator) FROM optimism.core.fact_delegations",
-      ttlMinutes: 60,
-    };
-
-    const resultBigNumbers1 = flipside.query
-      .run(queryBigNumbers1)
-      .then((records) => {
-        setDelegators(records.rows[0][0]);
-      });
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/729cbef4-d600-48d8-ac91-9b26dbcc59f7/data/latest"
+      )
+      .then((res) => {
+        setDelegators(res.data[0]["COUNT(DISTINCT DELEGATOR)"]);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
+
+  //   const queryBigNumbers2 = {
+  //     sql: "WITH grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ) SELECT sum(voting_power) AS tot_voting_power FROM grp",
+  //     ttlMinutes: 1,
+  //   };
+
+  //   const resultBigNumbers2 = flipside.query
+  //     .run(queryBigNumbers2)
+  //     .then((records) => {
+  //       setTokensDelegated(records.rows[0][0]);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
-
-    const queryBigNumbers2 = {
-      sql: "WITH grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ) SELECT sum(voting_power) AS tot_voting_power FROM grp",
-      ttlMinutes: 60,
-    };
-
-    const resultBigNumbers2 = flipside.query
-      .run(queryBigNumbers2)
-      .then((records) => {
-        setTokensDelegated(records.rows[0][0]);
-      });
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/2e7e4b69-1db4-409e-b8c8-6d1bf7340662/data/latest"
+      )
+      .then((res) => {
+        setTokensDelegated(res.data[0]["TOT_VOTING_POWER"]);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {

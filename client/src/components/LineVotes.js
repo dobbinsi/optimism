@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Flipside } from "@flipsidecrypto/sdk";
+// import { Flipside } from "@flipsidecrypto/sdk";
+import axios from "axios";
 
 import {
   Chart as ChartJS,
@@ -14,7 +15,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
-const API_KEY = `${process.env.REACT_APP_API_KEY}`;
+// const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
 const LineVotes = () => {
   const [loading, setLoading] = useState(true);
@@ -58,105 +59,150 @@ const LineVotes = () => {
     setActive3(true);
   };
 
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
+
+  //   const queryThirtyLine = {
+  //     sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 30 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
+  //     ttlMinutes: 1,
+  //   };
+
+  //   const resultThirtyLine = flipside.query
+  //     .run(queryThirtyLine)
+  //     .then((records) => {
+  //       setThirtyLineData(records.rows);
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
+
+  //   const queryNinetyLine = {
+  //     sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 90 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
+  //     ttlMinutes: 1,
+  //   };
+
+  //   const resultNinetyLine = flipside.query
+  //     .run(queryNinetyLine)
+  //     .then((records) => {
+  //       setNinetyLineData(records.rows);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
+
+  //   const queryOneLine = {
+  //     sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 180 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
+  //     ttlMinutes: 1,
+  //   };
+
+  //   const resultOneLine = flipside.query.run(queryOneLine).then((records) => {
+  //     setOneLineData(records.rows);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
-
-    const queryThirtyLine = {
-      sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 30 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 60,
-    };
-
-    const resultThirtyLine = flipside.query
-      .run(queryThirtyLine)
-      .then((records) => {
-        setThirtyLineData(records.rows);
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/ffe8a842-f78f-476e-b257-8f2a29fea3f2/data/latest"
+      )
+      .then((res) => {
+        setThirtyLineData(res.data);
         setLoading(false);
-      });
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
-
-    const queryNinetyLine = {
-      sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 90 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 60,
-    };
-
-    const resultNinetyLine = flipside.query
-      .run(queryNinetyLine)
-      .then((records) => {
-        setNinetyLineData(records.rows);
-      });
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/9f961975-9cc8-4ccf-b250-ab7fc8217ca5/data/latest"
+      )
+      .then((res) => {
+        setNinetyLineData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
-
-    const queryOneLine = {
-      sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 180 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-      ttlMinutes: 60,
-    };
-
-    const resultOneLine = flipside.query.run(queryOneLine).then((records) => {
-      setOneLineData(records.rows);
-    });
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/b7ec34e6-64b8-47ee-a97d-6cb8175e70da/data/latest"
+      )
+      .then((res) => {
+        setOneLineData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
+  // useEffect(() => {
+  //   const flipside = new Flipside(
+  //     API_KEY,
+  //     "https://node-api.flipsidecrypto.com"
+  //   );
+
+  //   const queryProps = {
+  //     sql: "with props as ( select proposal_start_time :: date as date, proposal_id, 1 as num FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' qualify (ROW_NUMBER() over (partition by proposal_id order by vote_timestamp DESC)) = 1 ), pre_final as ( SELECT date, sum(num) over (order by date) as prop_time FROM props ) select date, prop_time from pre_final qualify (ROW_NUMBER() over (partition by date order by prop_time desc)) = 1 ORDER BY date ASC",
+  //     ttlMinutes: 1,
+  //   };
+
+  //   const resultProps = flipside.query.run(queryProps).then((records) => {
+  //     setPropsData(records.rows);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    const flipside = new Flipside(
-      API_KEY,
-      "https://node-api.flipsidecrypto.com"
-    );
-
-    const queryProps = {
-      sql: "with props as ( select proposal_start_time :: date as date, proposal_id, 1 as num FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' qualify (ROW_NUMBER() over (partition by proposal_id order by vote_timestamp DESC)) = 1 ), pre_final as ( SELECT date, sum(num) over (order by date) as prop_time FROM props ) select date, prop_time from pre_final qualify (ROW_NUMBER() over (partition by date order by prop_time desc)) = 1 ORDER BY date ASC",
-      ttlMinutes: 60,
-    };
-
-    const resultProps = flipside.query.run(queryProps).then((records) => {
-      setPropsData(records.rows);
-    });
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/6cd8278e-be97-4736-860c-7c24b3cc0672/data/latest"
+      )
+      .then((res) => {
+        setPropsData(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const datesThirty = thirtyLineData.map((item) => {
-    return item[0];
+    return item["VOTE_DATE"];
   });
 
   const amountsThirty = thirtyLineData.map((item) => {
-    return item[1];
+    return item["NUM_VOTERS"];
   });
 
   const datesNinety = ninetyLineData.map((item) => {
-    return item[0];
+    return item["VOTE_DATE"];
   });
 
   const amountsNinety = ninetyLineData.map((item) => {
-    return item[1];
+    return item["NUM_VOTERS"];
   });
 
   const datesOne = oneLineData.map((item) => {
-    return item[0];
+    return item["VOTE_DATE"];
   });
 
   const amountsOne = oneLineData.map((item) => {
-    return item[1];
+    return item["NUM_VOTERS"];
   });
 
   const datesProps = propsData.map((item) => {
-    return item[0];
+    return item["DATE"];
   });
 
   const amountsProps = propsData.map((item) => {
-    return item[1];
+    return item["PROP_TIME"];
   });
 
   ChartJS.register(
