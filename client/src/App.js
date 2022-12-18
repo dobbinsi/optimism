@@ -141,7 +141,7 @@ function App() {
             ) : (
               <>
                 <ErrorBoundary
-                  FallbackComponent={<Fallback dark={isDarkMode} />}
+                  FallbackComponent={Fallback}
                   onError={errorHandler}
                 >
                   <BigNum2 dark={isDarkMode} />
