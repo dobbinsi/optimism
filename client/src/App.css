@@ -9,7 +9,20 @@
 body {
   background-color: #ffffff;
   color: #000000;
+  min-height: 100vh;
+  min-width: 100%;
 }
+
+.test {
+  min-height: 100vh;
+  min-width: 100%;
+}
+
+#dark .test {
+  min-height: 100vh;
+  min-width: 100%;
+  background-color: #000000;
+ }
 
 .wrapper {
   width: 85%;
@@ -38,6 +51,14 @@ body {
   font-weight: 700;
   font-style: italic;
   margin-left: 10px;
+}
+
+#dark .logo h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  font-style: italic;
+  margin-left: 10px;
+  color: #fff;
 }
 
 .op-logo {
@@ -76,6 +97,15 @@ body {
   font-weight: lighter;
 }
 
+#dark .footer h2 {
+  color: #fff;
+}
+
+#dark .footer h3 {
+  font-weight: lighter;
+  color: #fff;
+}
+
 .logo-footer {
   display: flex;
   justify-content: center;
@@ -95,6 +125,16 @@ body {
 .footer-links:visited {
   text-decoration: none;
   color: #000000;
+}
+
+#dark .footer-links {
+  text-decoration: none;
+  color: #fff;
+}
+
+#dark .footer-links:visited {
+  text-decoration: none;
+  color: #fff;
 }
 
 .triple {
@@ -119,8 +159,19 @@ body {
   font-size: xxx-large;
 }
 
+#dark .big-numbers h1 {
+  color: #d50711;
+  margin-bottom: 10px;
+  font-size: xxx-large;
+}
+
 .big-numbers h2 {
   color: #ff1420;
+  font-size: medium;
+}
+
+#dark .big-numbers h2 {
+  color: #ceced8;
   font-size: medium;
 }
 
@@ -144,6 +195,11 @@ body {
 
 .leader-title {
   margin-bottom: 20px;
+}
+
+#dark .leader-title {
+  margin-bottom: 20px;
+  color: #ceced8;
 }
 
 .table-wrapper {
@@ -189,6 +245,18 @@ td {
 
 .table-main tbody tr:hover {
   background-color: #eceeef;
+  color: #ff1420;
+}
+
+#dark .table-main tbody tr {
+  border-bottom: 1px solid #3d4147;
+  border-left: 2px solid #3d4147;
+  border-right: 2px solid #3d4147;
+  color: #ceced8;
+}
+
+#dark .table-main tbody tr:hover {
+  background-color: rgba(197, 236, 255, 0.1);
   color: #ff1420;
 }
 
@@ -273,11 +341,49 @@ th.first-column {
   border: 1px solid #ddd;
   cursor: pointer;
 }
+
 .page-link:focus,
 .page-link:hover {
   color: #3d4147;
   background-color: #eceeef;
   border-color: #ddd;
+}
+
+#dark .page-item.active .page-link,
+#dark .page-item.active .page-link:focus,
+#dark .page-item.active .page-link:hover {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #ff1420;
+  border-color: #ff1420;
+}
+#dark .page-item.disabled .page-link,
+#dark .page-item.disabled .page-link:focus,
+#dark .page-item.disabled .page-link:hover {
+  color: #818a91;
+  pointer-events: none;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ddd;
+}
+#dark .page-link {
+  position: relative;
+  float: left;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  color: #ceced8;
+  text-decoration: none;
+  background-color: #000000;
+  border: 1px solid #3d4147;
+  cursor: pointer;
+}
+
+#dark .page-link:focus,
+#dark .page-link:hover {
+  color: #ceced8;
+  background-color: rgba(197, 236, 255, 0.1);
+  border-color: rgba(197, 236, 255, 0.1);
 }
 
 .title-date {
@@ -290,6 +396,10 @@ th.first-column {
 
 .date-toggle {
   text-align: right;
+}
+
+#dark .select-date {
+  color: #ceced8;
 }
 
 .date-toggle-values {
@@ -352,7 +462,7 @@ th.first-column {
   min-height: 150px;
   width: 42%;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: transparent;
   border-radius: 5px;
   border-style: solid;
   border-width: 2px;
@@ -365,15 +475,32 @@ th.first-column {
   color: #3d4147;
 }
 
+#dark .small-chart-area h3 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #ceced8;
+}
+
 .sum-flows-text {
   text-align: center;
   margin-top: 20px;
   color: #3d4147;
 }
 
+#dark .sum-flows-text {
+  text-align: center;
+  margin-top: 20px;
+  color: #ceced8;
+}
+
 .sum-flows {
   text-align: center;
   color: 1;
+}
+
+#dark .sum-flows {
+  text-align: center;
+  color: #fff;
 }
 
 .sum-flows-neg {
@@ -394,6 +521,12 @@ th.first-column {
 .loader-blank h3 {
   text-align: center;
   margin-top: 20px;
+}
+
+#dark .loader-blank h3 {
+  text-align: center;
+  margin-top: 20px;
+  color: #fff;
 }
 
 .delegator-mode {
@@ -456,7 +589,7 @@ th.first-column {
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1080px) {
   .header-bigtxt {
     display: none;
   }
@@ -464,6 +597,12 @@ th.first-column {
 
 .fallback {
   text-align: center;
+}
+
+#dark .fallback {
+  text-align: center;
+  background-color: #000000;
+  color: #fff;
 }
 
 .fallback img {

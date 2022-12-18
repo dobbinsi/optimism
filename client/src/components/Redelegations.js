@@ -127,6 +127,9 @@ const Redelegations = () => {
     plugins: {
       legend: {
         position: "bottom",
+        labels: {
+          color: "#8b949e",
+        },
       },
       title: {
         display: true,
@@ -136,6 +139,7 @@ const Redelegations = () => {
           family: "'Rubik', sans-serif",
           weight: "lighter",
         },
+        color: "#8b949e",
       },
     },
   };
@@ -174,6 +178,9 @@ const Redelegations = () => {
     plugins: {
       legend: {
         position: "bottom",
+        labels: {
+          color: "#8b949e",
+        },
       },
       title: {
         display: true,
@@ -183,6 +190,7 @@ const Redelegations = () => {
           family: "'Rubik', sans-serif",
           weight: "lighter",
         },
+        color: "#8b949e",
       },
     },
   };
@@ -361,10 +369,10 @@ const Redelegations = () => {
         <>
           <div className="title-date">
             <div className="table-title">
-              <h1>Trends: Delegation Activity</h1>
+              <h1 className="leader-title">Trends: Delegation Activity</h1>
             </div>
             <div className="date-toggle">
-              <p>Select Date Range</p>
+              <p className="select-date">Select Date Range</p>
               <button
                 style={{ color: active1 ? "#ff1420" : "#68778d" }}
                 onClick={thirtyHandler}

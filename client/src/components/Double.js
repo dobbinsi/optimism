@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-// import { Flipside } from "@flipsidecrypto/sdk";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "axios";
 
-// const API_KEY = `${process.env.REACT_APP_API_KEY}`;
-
-const Double = () => {
+const Double = (props) => {
   const [thirtyDoubleData, setThirtyDoubleData] = useState([]);
   const [sixtyDoubleData, setSixtyDoubleData] = useState([]);
   const [ninetyDoubleData, setNinetyDoubleData] = useState([]);
@@ -47,24 +44,6 @@ const Double = () => {
     setActive3(true);
   };
 
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryThirtyDouble = {
-  //     sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 30 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultThirtyDouble = flipside.query
-  //     .run(queryThirtyDouble)
-  //     .then((records) => {
-  //       setThirtyDoubleData(records.rows);
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   useEffect(() => {
     axios
@@ -78,23 +57,6 @@ const Double = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const querySixtyDouble = {
-  //     sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 60 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultSixtyDouble = flipside.query
-  //     .run(querySixtyDouble)
-  //     .then((records) => {
-  //       setSixtyDoubleData(records.rows);
-  //     });
-  // }, []);
 
   useEffect(() => {
     axios
@@ -107,23 +69,6 @@ const Double = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryNinetyDouble = {
-  //     sql: "WITH delegation_change AS (SELECT block_timestamp :: date, delegator, to_delegate, t.tag_name AS to_delegate_name, from_delegate, tt.tag_name AS from_delegate_name, (raw_new_balance - raw_previous_balance) / POW(10, 21) AS balance_change, raw_new_balance / POW(10,21) AS OP_delegated FROM optimism.core.fact_delegations d LEFT OUTER JOIN crosschain.core.address_tags t ON d.to_delegate = t.address LEFT OUTER JOIN crosschain.core.address_tags tt ON d.from_delegate = tt.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' AND block_timestamp :: date >= CURRENT_DATE - 90 ), bal_to AS (SELECT to_delegate as delegate, sum(balance_change) as bal FROM delegation_change GROUP BY to_delegate UNION SELECT from_delegate as delegate, sum(-balance_change) as bal FROM delegation_change GROUP BY from_delegate) SELECT delegate, t.tag_name AS delegate_name, sum(bal) as balance_change FROM bal_to d LEFT OUTER JOIN crosschain.core.address_tags t ON d.delegate = t.address WHERE t.creator = 'jkhuhnke11' AND t.tag_type = 'delegate_name' GROUP BY delegate, t.tag_name",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultNinetyDouble = flipside.query
-  //     .run(queryNinetyDouble)
-  //     .then((records) => {
-  //       setNinetyDoubleData(records.rows);
-  //     });
-  // }, []);
 
   useEffect(() => {
     axios
@@ -194,10 +139,10 @@ const Double = () => {
     <div className="single-main-leader">
       <div className="title-date">
         <div className="table-title">
-          <h1>Trends: OP Gainers & Losers</h1>
+          <h1 className="leader-title">Trends: OP Gainers & Losers</h1>
         </div>
         <div className="date-toggle">
-          <p>Select Date Range</p>
+          <p className="select-date">Select Date Range</p>
           <button
             style={{ color: active1 ? "#ff1420" : "#68778d" }}
             onClick={thirtyHandler}

@@ -1,6 +1,7 @@
 import flipjawn from "../logos/flipside.png";
+import flipjawn2 from "../logos/flipsidewhite.png";
 
-const Footer = () => {
+const Footer = (props) => {
   return (
     <div className="footer">
       <h3>
@@ -24,15 +25,31 @@ const Footer = () => {
       </h3>
       <div className="logo-footer">
         <h2 className="footer-bigtxt">Powered by</h2>
-        <a
-          href="https://flipsidecrypto.xyz/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="footer-links"
-        >
-          {" "}
-          <img src={flipjawn} className="flipside-logo" alt="flipside" />{" "}
-        </a>
+        {props.dark ? (
+          <a
+            href="https://flipsidecrypto.xyz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-links"
+          >
+            {" "}
+            <img
+              src={flipjawn2}
+              className="flipside-logo"
+              alt="flipside"
+            />{" "}
+          </a>
+        ) : (
+          <a
+            href="https://flipsidecrypto.xyz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-links"
+          >
+            {" "}
+            <img src={flipjawn} className="flipside-logo" alt="flipside" />{" "}
+          </a>
+        )}
       </div>
     </div>
   );

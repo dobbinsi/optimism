@@ -8,7 +8,7 @@ import axios from "axios";
 
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
-const Leaderboard = () => {
+const Leaderboard = (props) => {
   const notInitialRender = useRef(false);
   const [OPData, setOPData] = useState([]);
   const [delData, setDelData] = useState([]);
@@ -86,23 +86,6 @@ const Leaderboard = () => {
     };
   }, [dName]);
 
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryOP = {
-  //     sql: "WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ), grp2 AS ( SELECT current_delegate, count(DISTINCT delegator) AS num_delegating_addresses FROM user_delegations GROUP BY current_delegate ), vp AS ( SELECT sum(voting_power) AS tot_voting_power FROM grp ), sums AS ( SELECT count(DISTINCT delegator) as tot_delegators FROM user_delegations ud INNER JOIN grp s ON ud.current_delegate = s.delegate ), votes AS ( SELECT voter, count(proposal_id) AS num_props_voted FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' GROUP BY voter ) SELECT DENSE_RANK() OVER ( ORDER BY voting_power DESC ) as delegate_rank, delegate AS delegate_address, tag_name, COALESCE(num_props_voted, 0) AS num_props_voted, voting_power as total_op_delegated, voting_power / tot_voting_power * 100 AS percent_voting_power, num_delegating_addresses, num_delegating_addresses / tot_delegators * 100 AS percent_delegating_addresses FROM grp g JOIN sums JOIN vp LEFT JOIN votes ON delegate = LOWER(voter) LEFT OUTER JOIN crosschain.core.address_tags ON delegate = LOWER(address) LEFT OUTER JOIN grp2 gg ON g.delegate = gg.current_delegate WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ORDER BY voting_power DESC",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultOP = flipside.query.run(queryOP).then((records) => {
-  //     setOPData(records.rows);
-  //     setLoading(false);
-  //   });
-  // }, []);
-
   useEffect(() => {
     axios
       .get(
@@ -115,25 +98,6 @@ const Leaderboard = () => {
       .catch((err) => console.log(err));
   }, []);
 
-
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryDelegators = {
-  //     sql: "WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ), grp2 AS ( SELECT current_delegate, count(DISTINCT delegator) AS num_delegating_addresses FROM user_delegations GROUP BY current_delegate ), vp AS ( SELECT sum(voting_power) AS tot_voting_power FROM grp ), sums AS ( SELECT count(DISTINCT delegator) as tot_delegators FROM user_delegations ud INNER JOIN grp s ON ud.current_delegate = s.delegate ), votes AS ( SELECT voter, count(proposal_id) AS num_props_voted FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' GROUP BY voter ) SELECT DENSE_RANK() OVER ( ORDER BY voting_power DESC ) as delegate_rank, delegate AS delegate_address, tag_name, COALESCE(num_props_voted, 0) AS num_props_voted, voting_power as total_op_delegated, voting_power / tot_voting_power * 100 AS percent_voting_power, num_delegating_addresses, num_delegating_addresses / tot_delegators * 100 AS percent_delegating_addresses FROM grp g JOIN sums JOIN vp LEFT JOIN votes ON delegate = LOWER(voter) LEFT OUTER JOIN crosschain.core.address_tags ON delegate = LOWER(address) LEFT OUTER JOIN grp2 gg ON g.delegate = gg.current_delegate WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ORDER BY num_delegating_addresses DESC",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultDelegators = flipside.query
-  //     .run(queryDelegators)
-  //     .then((records) => {
-  //       setDelData(records.rows);
-  //     });
-  // }, []);
-
   useEffect(() => {
     axios
       .get(
@@ -144,22 +108,6 @@ const Leaderboard = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryProps = {
-  //     sql: "WITH user_delegations AS ( SELECT delegator, current_delegate, current_voting_power FROM ( SELECT block_number, block_timestamp, tx_hash, delegator, from_delegate AS old_delegate, to_delegate AS current_delegate, raw_new_balance as current_voting_power, DENSE_RANK() OVER ( PARTITION BY delegator ORDER BY block_timestamp DESC ) AS rank FROM optimism.core.fact_delegations WHERE status = 'SUCCESS' ) WHERE rank = 1 ), grp AS ( SELECT LOWER(voter) as delegate, voting_power AS voting_power FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' QUALIFY(ROW_NUMBER() over(PARTITION BY voter ORDER BY vote_timestamp DESC)) = 1 ), grp2 AS ( SELECT current_delegate, count(DISTINCT delegator) AS num_delegating_addresses FROM user_delegations GROUP BY current_delegate ), vp AS ( SELECT sum(voting_power) AS tot_voting_power FROM grp ), sums AS ( SELECT count(DISTINCT delegator) as tot_delegators FROM user_delegations ud INNER JOIN grp s ON ud.current_delegate = s.delegate ), votes AS ( SELECT voter, count(proposal_id) AS num_props_voted FROM ethereum.core.ez_snapshot WHERE space_id = 'opcollective.eth' GROUP BY voter ) SELECT DENSE_RANK() OVER ( ORDER BY voting_power DESC ) as delegate_rank, delegate AS delegate_address, tag_name, COALESCE(num_props_voted, 0) AS num_props_voted, voting_power as total_op_delegated, voting_power / tot_voting_power * 100 AS percent_voting_power, num_delegating_addresses, num_delegating_addresses / tot_delegators * 100 AS percent_delegating_addresses FROM grp g JOIN sums JOIN vp LEFT JOIN votes ON delegate = LOWER(voter) LEFT OUTER JOIN crosschain.core.address_tags ON delegate = LOWER(address) LEFT OUTER JOIN grp2 gg ON g.delegate = gg.current_delegate WHERE creator = 'jkhuhnke11' AND blockchain = 'optimism' AND tag_type = 'delegate_name' ORDER BY num_props_voted DESC",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultProps = flipside.query.run(queryProps).then((records) => {
-  //     setPropsData(records.rows);
-  //   });
-  // }, []);
 
   useEffect(() => {
     axios
@@ -216,7 +164,9 @@ const Leaderboard = () => {
               <tbody>
                 {sliceProps.map((delegate, index) => (
                   <tr>
-                    <td className="validator-shares">{delegate["DELEGATE_RANK"]}</td>
+                    <td className="validator-shares">
+                      {delegate["DELEGATE_RANK"]}
+                    </td>
                     <td
                       className="delegator-mode"
                       onClick={(e) => {
@@ -233,28 +183,40 @@ const Leaderboard = () => {
                       })}
                     </td>
                     <td className="validator-shares">
-                      {delegate["TOTAL_OP_DELEGATED"].toLocaleString(undefined, {
-                        maximumFractionDigits: 0,
-                        minimumIntegerDigits: 2,
-                      })}
+                      {delegate["TOTAL_OP_DELEGATED"].toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 0,
+                          minimumIntegerDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["PERCENT_VOTING_POWER"].toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {delegate["PERCENT_VOTING_POWER"].toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["NUM_DELEGATING_ADDRESSES"].toLocaleString(undefined, {
-                        maximumFractionDigits: 0,
-                        minimumIntegerDigits: 2,
-                      })}
+                      {delegate["NUM_DELEGATING_ADDRESSES"].toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 0,
+                          minimumIntegerDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["PERCENT_DELEGATING_ADDRESSES"].toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {delegate["PERCENT_DELEGATING_ADDRESSES"].toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -305,7 +267,9 @@ const Leaderboard = () => {
               <tbody>
                 {sliceDel.map((delegate, index) => (
                   <tr>
-                    <td className="validator-shares">{delegate["DELEGATE_RANK"]}</td>
+                    <td className="validator-shares">
+                      {delegate["DELEGATE_RANK"]}
+                    </td>
                     <td
                       className="delegator-mode"
                       onClick={(e) => {
@@ -322,28 +286,40 @@ const Leaderboard = () => {
                       })}
                     </td>
                     <td className="validator-shares">
-                      {delegate["TOTAL_OP_DELEGATED"].toLocaleString(undefined, {
-                        maximumFractionDigits: 0,
-                        minimumIntegerDigits: 2,
-                      })}
+                      {delegate["TOTAL_OP_DELEGATED"].toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 0,
+                          minimumIntegerDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["PERCENT_VOTING_POWER"].toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {delegate["PERCENT_VOTING_POWER"].toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["NUM_DELEGATING_ADDRESSES"].toLocaleString(undefined, {
-                        maximumFractionDigits: 0,
-                        minimumIntegerDigits: 2,
-                      })}
+                      {delegate["NUM_DELEGATING_ADDRESSES"].toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 0,
+                          minimumIntegerDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["PERCENT_DELEGATING_ADDRESSES"].toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {delegate["PERCENT_DELEGATING_ADDRESSES"].toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -386,6 +362,7 @@ const Leaderboard = () => {
                           className="spinner-values"
                           size={50}
                           speedMultiplier={0.75}
+                          color={props.dark ? "#ceced8" : "#000000"}
                         />
                       </div>
                       <p className="load-delegators">
@@ -476,7 +453,9 @@ const Leaderboard = () => {
               <tbody>
                 {sliceOP.map((delegate, index) => (
                   <tr>
-                    <td className="validator-shares">{delegate["DELEGATE_RANK"]}</td>
+                    <td className="validator-shares">
+                      {delegate["DELEGATE_RANK"]}
+                    </td>
                     <td
                       className="delegator-mode"
                       onClick={(e) => {
@@ -493,28 +472,40 @@ const Leaderboard = () => {
                       })}
                     </td>
                     <td className="validator-shares">
-                      {delegate["TOTAL_OP_DELEGATED"].toLocaleString(undefined, {
-                        maximumFractionDigits: 0,
-                        minimumIntegerDigits: 2,
-                      })}
+                      {delegate["TOTAL_OP_DELEGATED"].toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 0,
+                          minimumIntegerDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["PERCENT_VOTING_POWER"].toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {delegate["PERCENT_VOTING_POWER"].toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["NUM_DELEGATING_ADDRESSES"].toLocaleString(undefined, {
-                        maximumFractionDigits: 0,
-                        minimumIntegerDigits: 2,
-                      })}
+                      {delegate["NUM_DELEGATING_ADDRESSES"].toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 0,
+                          minimumIntegerDigits: 2,
+                        }
+                      )}
                     </td>
                     <td className="validator-shares">
-                      {delegate["PERCENT_DELEGATING_ADDRESSES"].toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {delegate["PERCENT_DELEGATING_ADDRESSES"].toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}
                     </td>
                   </tr>
                 ))}

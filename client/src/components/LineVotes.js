@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { Flipside } from "@flipsidecrypto/sdk";
 import axios from "axios";
 
 import {
@@ -15,9 +14,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
-// const API_KEY = `${process.env.REACT_APP_API_KEY}`;
-
-const LineVotes = () => {
+const LineVotes = (props) => {
   const [loading, setLoading] = useState(true);
   const [ninetyLineData, setNinetyLineData] = useState([]);
   const [oneLineData, setOneLineData] = useState([]);
@@ -59,59 +56,6 @@ const LineVotes = () => {
     setActive3(true);
   };
 
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryThirtyLine = {
-  //     sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 30 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultThirtyLine = flipside.query
-  //     .run(queryThirtyLine)
-  //     .then((records) => {
-  //       setThirtyLineData(records.rows);
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryNinetyLine = {
-  //     sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 90 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultNinetyLine = flipside.query
-  //     .run(queryNinetyLine)
-  //     .then((records) => {
-  //       setNinetyLineData(records.rows);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryOneLine = {
-  //     sql: "SELECT vote_timestamp :: date as vote_date, count(DISTINCT voter) as num_voters FROM ethereum.core.ez_snapshot WHERE vote_timestamp :: date >= CURRENT_DATE - 180 AND space_id = 'opcollective.eth' GROUP BY vote_timestamp :: date ORDER BY vote_timestamp :: date ASC",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultOneLine = flipside.query.run(queryOneLine).then((records) => {
-  //     setOneLineData(records.rows);
-  //   });
-  // }, []);
-
   useEffect(() => {
     axios
       .get(
@@ -145,22 +89,6 @@ const LineVotes = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-
-  // useEffect(() => {
-  //   const flipside = new Flipside(
-  //     API_KEY,
-  //     "https://node-api.flipsidecrypto.com"
-  //   );
-
-  //   const queryProps = {
-  //     sql: "with props as ( select proposal_start_time :: date as date, proposal_id, 1 as num FROM ETHEREUM.CORE.EZ_SNAPSHOT WHERE space_id = 'opcollective.eth' qualify (ROW_NUMBER() over (partition by proposal_id order by vote_timestamp DESC)) = 1 ), pre_final as ( SELECT date, sum(num) over (order by date) as prop_time FROM props ) select date, prop_time from pre_final qualify (ROW_NUMBER() over (partition by date order by prop_time desc)) = 1 ORDER BY date ASC",
-  //     ttlMinutes: 1,
-  //   };
-
-  //   const resultProps = flipside.query.run(queryProps).then((records) => {
-  //     setPropsData(records.rows);
-  //   });
-  // }, []);
 
   useEffect(() => {
     axios
@@ -224,6 +152,7 @@ const LineVotes = () => {
           font: {
             family: "'Rubik', sans-serif",
           },
+          color: "#8b949e",
         },
         grid: {
           display: false,
@@ -234,6 +163,7 @@ const LineVotes = () => {
           font: {
             family: "'Rubik', sans-serif",
           },
+          color: "#8b949e",
         },
         grid: {
           display: false,
@@ -252,6 +182,7 @@ const LineVotes = () => {
           family: "'Rubik', sans-serif",
           weight: "lighter",
         },
+        color: "#8b949e",
       },
     },
   };
@@ -263,6 +194,20 @@ const LineVotes = () => {
         label: "Distinct Voters",
         data: amountsThirty,
         backgroundColor: "#ffdbe0",
+        borderColor: "#ff1420",
+        pointRadius: 2,
+        fill: true,
+      },
+    ],
+  };
+
+  const chartData4 = {
+    labels: datesThirty,
+    datasets: [
+      {
+        label: "Distinct Voters",
+        data: amountsThirty,
+        backgroundColor: "rgba(197, 236, 255, 0.1)",
         borderColor: "#ff1420",
         pointRadius: 2,
         fill: true,
@@ -284,6 +229,20 @@ const LineVotes = () => {
     ],
   };
 
+  const chartData5 = {
+    labels: datesNinety,
+    datasets: [
+      {
+        label: "Distinct Voters",
+        data: amountsNinety,
+        backgroundColor: "rgba(197, 236, 255, 0.1)",
+        borderColor: "#ff1420",
+        pointRadius: 2,
+        fill: true,
+      },
+    ],
+  };
+
   const chartData3 = {
     labels: datesOne,
     datasets: [
@@ -291,6 +250,20 @@ const LineVotes = () => {
         label: "Distinct Voters",
         data: amountsOne,
         backgroundColor: "#ffdbe0",
+        borderColor: "#ff1420",
+        pointRadius: 2,
+        fill: true,
+      },
+    ],
+  };
+
+  const chartData6 = {
+    labels: datesOne,
+    datasets: [
+      {
+        label: "Distinct Voters",
+        data: amountsOne,
+        backgroundColor: "rgba(197, 236, 255, 0.1)",
         borderColor: "#ff1420",
         pointRadius: 2,
         fill: true,
@@ -306,6 +279,7 @@ const LineVotes = () => {
           font: {
             family: "'Rubik', sans-serif",
           },
+          color: "#8b949e",
           minRotation: 45,
         },
         grid: {
@@ -317,6 +291,7 @@ const LineVotes = () => {
           font: {
             family: "'Rubik', sans-serif",
           },
+          color: "#8b949e",
         },
         grid: {
           display: false,
@@ -335,6 +310,7 @@ const LineVotes = () => {
           family: "'Rubik', sans-serif",
           weight: "lighter",
         },
+        color: "#8b949e",
       },
     },
   };
@@ -353,6 +329,20 @@ const LineVotes = () => {
     ],
   };
 
+  const propChartData2 = {
+    labels: datesProps,
+    datasets: [
+      {
+        label: "Total Proposals",
+        data: amountsProps,
+        backgroundColor: "rgba(197, 236, 255, 0.1)",
+        borderColor: "#ff1420",
+        pointRadius: 2,
+        fill: true,
+      },
+    ],
+  };
+
   return (
     <div className="single-main-leader">
       {loading ? (
@@ -361,10 +351,10 @@ const LineVotes = () => {
         <>
           <div className="title-date">
             <div className="table-title">
-              <h1>Trends: Voting Activity</h1>
+              <h1 className="leader-title">Trends: Voting Activity</h1>
             </div>
             <div className="date-toggle">
-              <p>Select Date Range</p>
+              <p className="select-date">Select Date Range</p>
               <button
                 style={{ color: active1 ? "#ff1420" : "#68778d" }}
                 onClick={thirtyHandler}
@@ -387,30 +377,39 @@ const LineVotes = () => {
           </div>
           {thirtyState && (
             <div className="chart-area">
-              <Line options={chartOptions} data={chartData1} />
+              <Line
+                options={chartOptions}
+                data={props.dark ? chartData4 : chartData1}
+              />
               <Line
                 options={propChartOptions}
-                data={propChartData}
+                data={props.dark ? propChartData2 : propChartData}
                 className="props-line"
               />
             </div>
           )}
           {ninetyState && (
             <div className="chart-area">
-              <Line options={chartOptions} data={chartData2} />
+              <Line
+                options={chartOptions}
+                data={props.dark ? chartData5 : chartData2}
+              />
               <Line
                 options={propChartOptions}
-                data={propChartData}
+                data={props.dark ? propChartData2 : propChartData}
                 className="props-line"
               />
             </div>
           )}
           {oneState && (
             <div className="chart-area">
-              <Line options={chartOptions} data={chartData3} />
+              <Line
+                options={chartOptions}
+                data={props.dark ? chartData6 : chartData3}
+              />
               <Line
                 options={propChartOptions}
-                data={propChartData}
+                data={props.dark ? propChartData2 : propChartData}
                 className="props-line"
               />
             </div>

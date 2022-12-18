@@ -10,7 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
-const IndiVotes = () => {
+const IndiVotes = (props) => {
   const delegates = [
     "Annymesh Mohanty",
     "Blockchain at Berkeley",
@@ -65,7 +65,7 @@ const IndiVotes = () => {
     "Zeng Jiajun",
   ];
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [indiData, setIndiData] = useState([]);
   const [indiData2, setIndiData2] = useState([]);
   const [value, setValue] = useState("Flipside Crypto");
@@ -126,12 +126,16 @@ const IndiVotes = () => {
       <div className="single-main">
         <div className="title-date">
           <div className="table-title">
-            <h1>Voting Activity: Individual Delegates</h1>
+            <h1 className="leader-title">
+              Voting Activity: Individual Delegates
+            </h1>
           </div>
         </div>
         <div className="date-toggle-values">
           <FormControl sx={{ m: 1, minWidth: 100 }}>
-            <InputLabel id="input-label">Select Delegate</InputLabel>
+            <InputLabel id="input-label" className="select-date">
+              Select Delegate
+            </InputLabel>
             <Select
               id="values"
               value={value}
@@ -214,11 +218,10 @@ const IndiVotes = () => {
                             className="spinner-values"
                             size={50}
                             speedMultiplier={0.75}
+                            color={props.dark ? "#ceced8" : "#000000"}
                           />
                         </div>
-                        <p className="load-delegators">
-                          Loading Vote History
-                        </p>
+                        <p className="load-delegators">Loading Vote History</p>
                       </td>
                     </tr>
                   ) : (

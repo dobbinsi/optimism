@@ -19,7 +19,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
-const Values = () => {
+const Values = (props) => {
   const [loading, setLoading] = useState(true);
   const [valuesData, setValuesData] = useState([]);
   const [value, setValue] = useState("data and analytics");
@@ -86,6 +86,9 @@ const Values = () => {
     plugins: {
       legend: {
         position: "bottom",
+        labels: {
+          color: "#8b949e",
+        },
       },
       title: {
         display: true,
@@ -95,6 +98,7 @@ const Values = () => {
           family: "'Rubik', sans-serif",
           weight: "lighter",
         },
+        color: "#8b949e",
       },
     },
   };
@@ -150,12 +154,16 @@ const Values = () => {
       <div className="single-main">
         <div className="title-date">
           <div className="table-title">
-            <h1>Trends: How Delegates Vote Based on Values</h1>
+            <h1 className="leader-title">
+              Trends: How Delegates Vote Based on Values
+            </h1>
           </div>
         </div>
         <div className="date-toggle-values">
           <FormControl sx={{ m: 1, minWidth: 100 }}>
-            <InputLabel id="input-label">Select Value</InputLabel>
+            <InputLabel id="input-label" className="select-date">
+              Select Value
+            </InputLabel>
             <Select
               id="values"
               value={value}
@@ -206,6 +214,7 @@ const Values = () => {
               className="spinner-values"
               size={50}
               speedMultiplier={0.75}
+              color={props.dark ? "#ceced8" : "#000000"}
             />
           </div>
         ) : (
