@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Flipside } from "@flipsidecrypto/sdk";
+import axios from "axios";
 
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -65,20 +66,30 @@ const IndiVotes = (props) => {
     "Zeng Jiajun",
   ];
 
-  const [loading, setLoading] = useState(true);
+  const notInitialRender = useRef(false);
+  const [loading, setLoading] = useState(false);
   const [indiData, setIndiData] = useState([]);
   const [indiData2, setIndiData2] = useState([]);
   const [value, setValue] = useState("Flipside Crypto");
   const [oldSort, setOldSort] = useState(false);
+  const [defData, setDefData] = useState([]);
+  const [defData2, setDefData2] = useState([]);
+  const [defMode, setDefMode] = useState(true);
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    setDefMode(false);
     setLoading(true);
   };
 
   const [currentPage, setCurrentPage] = useState(1);
   const sliceData = indiData.slice((currentPage - 1) * 10, currentPage * 10);
   const sliceData2 = indiData2.slice((currentPage - 1) * 10, currentPage * 10);
+  const sliceDataDef = defData.slice((currentPage - 1) * 10, currentPage * 10);
+  const sliceDataDef2 = defData2.slice(
+    (currentPage - 1) * 10,
+    currentPage * 10
+  );
 
   const oldSortHandler = () => {
     setOldSort(!oldSort);
@@ -95,12 +106,17 @@ const IndiVotes = (props) => {
       ttlMinutes: 60,
     };
 
-    const resultIndiVotes = flipside.query
-      .run(queryIndiVotes)
-      .then((records) => {
-        setIndiData(records.rows);
-        setLoading(false);
-      });
+    if (notInitialRender.current) {
+      const resultIndiVotes = flipside.query
+        .run(queryIndiVotes)
+        .then((records) => {
+          setIndiData(records.rows);
+          setLoading(false);
+        });
+    }
+    return () => {
+      notInitialRender.current = true;
+    };
   }, [value]);
 
   useEffect(() => {
@@ -114,12 +130,39 @@ const IndiVotes = (props) => {
       ttlMinutes: 60,
     };
 
-    const resultIndiVotes2 = flipside.query
-      .run(queryIndiVotes2)
-      .then((records) => {
-        setIndiData2(records.rows);
-      });
+    if (notInitialRender.current) {
+      const resultIndiVotes2 = flipside.query
+        .run(queryIndiVotes2)
+        .then((records) => {
+          setIndiData2(records.rows);
+        });
+    }
+    return () => {
+      notInitialRender.current = true;
+    };
   }, [value]);
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/ff97e044-7285-48ed-9efe-aea7de4a97a6/data/latest"
+      )
+      .then((res) => {
+        setDefData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/11fd7d9e-3cdf-4aee-bf59-fa3ee5a82e31/data/latest"
+      )
+      .then((res) => {
+        setDefData2(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="single-main">
@@ -154,79 +197,111 @@ const IndiVotes = (props) => {
             </Select>
           </FormControl>
         </div>
-        {oldSort ? (
-          <div className="table-wrapper">
-            <div className="table-scroll">
-              <table className="table-main">
-                <thead>
-                  <tr>
-                    <th className="first-column">Proposal Title</th>
-                    <th className="sorter" onClick={oldSortHandler}>
-                      Date
-                    </th>
-                    <th className="sorter">Vote</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sliceData2.map((vote, index) => (
-                    <tr>
-                      <td>
-                        <a
-                          href={"https://snapshot.org/#/opcollective.eth/proposal/".concat(
-                            vote[3]
-                          )}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="table-links"
-                        >
-                          {vote[2]}
-                        </a>
-                      </td>
-                      <td className="validator-voters">{vote[4]}</td>
-                      <td className="validator-voters">{vote[6]}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <Pagination
-                currentPage={currentPage}
-                total={180}
-                limit={20}
-                onPageChange={(page) => setCurrentPage(page)}
-              />
-            </div>
-          </div>
+        {defMode ? (
+          <>
+            {oldSort ? (
+              <div className="table-wrapper">
+                <div className="table-scroll">
+                  <table className="table-main">
+                    <thead>
+                      <tr>
+                        <th className="first-column">Proposal Title</th>
+                        <th className="sorter" onClick={oldSortHandler}>
+                          Date
+                        </th>
+                        <th className="sorter">Vote</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sliceDataDef2.map((vote, index) => (
+                        <tr>
+                          <td>
+                            <a
+                              href={"https://snapshot.org/#/opcollective.eth/proposal/".concat(
+                                vote["PROPOSAL_ID"]
+                              )}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="table-links"
+                            >
+                              {vote["PROPOSAL_TITLE"]}
+                            </a>
+                          </td>
+                          <td className="validator-voters">{vote["DATE"]}</td>
+                          <td className="validator-voters">{vote["VOTE"]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <Pagination
+                    currentPage={currentPage}
+                    total={180}
+                    limit={20}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="table-wrapper">
+                <div className="table-scroll">
+                  <table className="table-main">
+                    <thead>
+                      <tr>
+                        <th className="first-column">Proposal Title</th>
+                        <th className="sorter" onClick={oldSortHandler}>
+                          Date
+                        </th>
+                        <th className="sorter">Vote</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sliceDataDef.map((vote, index) => (
+                        <tr>
+                          <td>
+                            <a
+                              href={"https://snapshot.org/#/opcollective.eth/proposal/".concat(
+                                vote["PROPOSAL_ID"]
+                              )}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="table-links"
+                            >
+                              {vote["PROPOSAL_TITLE"]}
+                            </a>
+                          </td>
+                          <td className="validator-voters">{vote["DATE"]}</td>
+                          <td className="validator-voters">{vote["VOTE"]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <Pagination
+                    currentPage={currentPage}
+                    total={180}
+                    limit={20}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  />
+                </div>
+              </div>
+            )}
+          </>
         ) : (
-          <div className="table-wrapper">
-            <div className="table-scroll">
-              <table className="table-main">
-                <thead>
-                  <tr>
-                    <th className="first-column">Proposal Title</th>
-                    <th className="sorter" onClick={oldSortHandler}>
-                      Date
-                    </th>
-                    <th className="sorter">Vote</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <tr>
-                      <td colSpan={3}>
-                        <div className="chart-area-values">
-                          <ClipLoader
-                            className="spinner-values"
-                            size={50}
-                            speedMultiplier={0.75}
-                            color={props.dark ? "#ceced8" : "#000000"}
-                          />
-                        </div>
-                        <p className="load-delegators">Loading Vote History</p>
-                      </td>
-                    </tr>
-                  ) : (
-                    <>
-                      {sliceData.map((vote, index) => (
+          <>
+            {oldSort ? (
+              <div className="table-wrapper">
+                <div className="table-scroll">
+                  <table className="table-main">
+                    <thead>
+                      <tr>
+                        <th className="first-column">Proposal Title</th>
+                        <th className="sorter" onClick={oldSortHandler}>
+                          Date
+                        </th>
+                        <th className="sorter">Vote</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sliceData2.map((vote, index) => (
                         <tr>
                           <td>
                             <a
@@ -244,18 +319,80 @@ const IndiVotes = (props) => {
                           <td className="validator-voters">{vote[6]}</td>
                         </tr>
                       ))}
-                    </>
-                  )}
-                </tbody>
-              </table>
-              <Pagination
-                currentPage={currentPage}
-                total={180}
-                limit={20}
-                onPageChange={(page) => setCurrentPage(page)}
-              />
-            </div>
-          </div>
+                    </tbody>
+                  </table>
+                  <Pagination
+                    currentPage={currentPage}
+                    total={180}
+                    limit={20}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="table-wrapper">
+                <div className="table-scroll">
+                  <table className="table-main">
+                    <thead>
+                      <tr>
+                        <th className="first-column">Proposal Title</th>
+                        <th className="sorter" onClick={oldSortHandler}>
+                          Date
+                        </th>
+                        <th className="sorter">Vote</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {loading ? (
+                        <tr>
+                          <td colSpan={3}>
+                            <div className="chart-area-values">
+                              <ClipLoader
+                                className="spinner-values"
+                                size={50}
+                                speedMultiplier={0.75}
+                                color={props.dark ? "#ceced8" : "#000000"}
+                              />
+                            </div>
+                            <p className="load-delegators">
+                              Loading Vote History
+                            </p>
+                          </td>
+                        </tr>
+                      ) : (
+                        <>
+                          {sliceData.map((vote, index) => (
+                            <tr>
+                              <td>
+                                <a
+                                  href={"https://snapshot.org/#/opcollective.eth/proposal/".concat(
+                                    vote[3]
+                                  )}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="table-links"
+                                >
+                                  {vote[2]}
+                                </a>
+                              </td>
+                              <td className="validator-voters">{vote[4]}</td>
+                              <td className="validator-voters">{vote[6]}</td>
+                            </tr>
+                          ))}
+                        </>
+                      )}
+                    </tbody>
+                  </table>
+                  <Pagination
+                    currentPage={currentPage}
+                    total={180}
+                    limit={20}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  />
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

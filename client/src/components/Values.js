@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Flipside } from "@flipsidecrypto/sdk";
 import {
   Chart as ChartJS,
@@ -16,16 +16,21 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { InputLabel } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import ClipLoader from "react-spinners/ClipLoader";
+import axios from "axios";
 
 const API_KEY = `${process.env.REACT_APP_API_KEY}`;
 
 const Values = (props) => {
-  const [loading, setLoading] = useState(true);
+  const notInitialRender = useRef(false);
+  const [loading, setLoading] = useState(false);
   const [valuesData, setValuesData] = useState([]);
   const [value, setValue] = useState("data and analytics");
+  const [defMode, setDefMode] = useState(true);
+  const [defData, setDefData] = useState([]);
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    setDefMode(false);
     setLoading(true);
   };
 
@@ -43,6 +48,22 @@ const Values = (props) => {
 
   const chartData3 = valuesData.map((item) => {
     return item[5];
+  });
+
+  const chartLabelsDef = defData.map((item) => {
+    return item["DELEGATE_NAME"];
+  });
+
+  const chartData1Def = defData.map((item) => {
+    return item["FORS"];
+  });
+
+  const chartData2Def = defData.map((item) => {
+    return item["AGAINSTS"];
+  });
+
+  const chartData3Def = defData.map((item) => {
+    return item["ABSTAINS"];
   });
 
   ChartJS.register(
@@ -130,6 +151,33 @@ const Values = (props) => {
     ],
   };
 
+  const chartDataDef = {
+    labels: chartLabelsDef,
+    datasets: [
+      {
+        label: "For",
+        data: chartData1Def,
+        backgroundColor: "#3d4147",
+        borderColor: ["#3d4147"],
+        borderWidth: 1.5,
+      },
+      {
+        label: "Against",
+        data: chartData2Def,
+        backgroundColor: "#ff1420",
+        borderColor: ["#3d4147"],
+        borderWidth: 1.5,
+      },
+      {
+        label: "Abstain",
+        data: chartData3Def,
+        backgroundColor: "#99a7bc",
+        borderColor: ["#3d4147"],
+        borderWidth: 1.5,
+      },
+    ],
+  };
+
   useEffect(() => {
     const flipside = new Flipside(
       API_KEY,
@@ -141,13 +189,29 @@ const Values = (props) => {
       ttlMinutes: 60,
     };
 
-    const resultValuesVotes = flipside.query
-      .run(queryValuesVotes)
-      .then((records) => {
-        setValuesData(records.rows);
-        setLoading(false);
-      });
+    if (notInitialRender.current) {
+      const resultValuesVotes = flipside.query
+        .run(queryValuesVotes)
+        .then((records) => {
+          setValuesData(records.rows);
+          setLoading(false);
+        });
+    }
+    return () => {
+      notInitialRender.current = true;
+    };
   }, [value]);
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://node-api.flipsidecrypto.com/api/v2/queries/affcf9aa-cde0-45e7-9090-a5d90d276f93/data/latest"
+      )
+      .then((res) => {
+        setDefData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="single-main-leader">
@@ -208,19 +272,30 @@ const Values = (props) => {
             </Select>
           </FormControl>
         </div>
-        {loading ? (
-          <div className="chart-area-values">
-            <ClipLoader
-              className="spinner-values"
-              size={50}
-              speedMultiplier={0.75}
-              color={props.dark ? "#ceced8" : "#000000"}
-            />
+        {defMode ? (
+          <div className="chart-area">
+            <Bar options={chartOptions} data={chartDataDef} />
           </div>
         ) : (
-          <div className="chart-area">
-            <Bar options={chartOptions} data={chartData} />
-          </div>
+          <>
+            {loading ? (
+              <>
+                <div className="chart-area-values">
+                  <ClipLoader
+                    className="spinner-values"
+                    size={50}
+                    speedMultiplier={0.75}
+                    color={props.dark ? "#ceced8" : "#000000"}
+                  />
+                </div>
+                <p className="load-delegators-val">Loading Chart</p>
+              </>
+            ) : (
+              <div className="chart-area">
+                <Bar options={chartOptions} data={chartData} />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

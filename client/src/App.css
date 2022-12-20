@@ -615,6 +615,21 @@ th.first-column {
   margin-top: 10px;
 }
 
+.load-delegators-val {
+  text-align: center;
+  margin-top: 10px;
+  font-size: smaller;
+}
+
+#dark .load-delegators-val {
+  text-align: center;
+  margin-top: 10px;
+  font-size: smaller;
+  color: #fff;
+}
+
+
+
 .props-line {
   margin-top: 120px;
 }
